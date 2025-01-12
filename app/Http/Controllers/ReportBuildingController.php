@@ -21,6 +21,8 @@ class ReportBuildingController extends Controller
         $sortBy = $request->input('sort_by', 'created_at');
         $order = $request->input('order', 'desc');
         $perPage = $request->input('per_page', 10);
+        $fromDate = $request->input('from_date', now()->toDateString());
+        $toDate = $request->input('to_date', now()->addDays(7)->toDateString());
         $is_available = $request->input('is_available', '');
         $is_booked = $request->input('is_booked', '');
 
@@ -39,16 +41,17 @@ class ReportBuildingController extends Controller
         })
         ->Where('is_available','like', "%{$is_available}%")
         ->Where('is_booked','like', "%{$is_booked}%")
+        ->whereBetween('tanggal', [$fromDate, $toDate])
         ->orderBy($sortBy, $order)
         ->paginate($perPage);
 
         $buildings = Building::isActive()->get();
 
         if ($request->ajax()) {
-            return view('report_building.table', compact('buildingSchedules', 'buildings', 'search', 'sortBy', 'order', 'perPage'));
+            return view('report_building.table', compact('buildingSchedules', 'buildings', 'search', 'sortBy', 'order', 'perPage', 'fromDate', 'toDate'));
         }
 
-        return view('report_building.index', compact('buildingSchedules', 'buildings', 'search', 'sortBy', 'order', 'perPage'));
+        return view('report_building.index', compact('buildingSchedules', 'buildings', 'search', 'sortBy', 'order', 'perPage', 'fromDate', 'toDate'));
     }
 
     public function exportExcel(Request $request)
@@ -56,6 +59,8 @@ class ReportBuildingController extends Controller
         $search = $request->input('search', '');
         $sortBy = $request->input('sort_by', 'created_at');
         $order = $request->input('order', 'desc');
+        $fromDate = $request->input('from_date', now()->toDateString());
+        $toDate = $request->input('to_date', now()->addDays(7)->toDateString());
         $is_available = $request->input('is_available', '');
         $is_booked = $request->input('is_booked', '');
 
@@ -67,6 +72,7 @@ class ReportBuildingController extends Controller
         })
         ->Where('is_available','like', "%{$is_available}%")
         ->Where('is_booked','like', "%{$is_booked}%")
+        ->whereBetween('tanggal', [$fromDate, $toDate])
         ->orderBy($sortBy, $order)
         ->get();
 
@@ -79,6 +85,8 @@ class ReportBuildingController extends Controller
         $search = $request->input('search', '');
         $sortBy = $request->input('sort_by', 'created_at');
         $order = $request->input('order', 'desc');
+        $fromDate = $request->input('from_date', now()->toDateString());
+        $toDate = $request->input('to_date', now()->addDays(7)->toDateString());
         $is_available = $request->input('is_available', '');
         $is_booked = $request->input('is_booked', '');
 
@@ -90,6 +98,7 @@ class ReportBuildingController extends Controller
         })
         ->Where('is_available','like', "%{$is_available}%")
         ->Where('is_booked','like', "%{$is_booked}%")
+        ->whereBetween('tanggal', [$fromDate, $toDate])
         ->orderBy($sortBy, $order)
         ->get();
 

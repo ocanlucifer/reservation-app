@@ -18,6 +18,8 @@ class ReportController extends Controller
         $sortBy = $request->input('sort_by', 'created_at');
         $order = $request->input('order', 'desc');
         $perPage = $request->input('per_page', 10);
+        $fromDate = $request->input('from_date', now()->toDateString());
+        $toDate = $request->input('to_date', now()->addDays(7)->toDateString());
         $is_available = $request->input('is_available', '');
         $is_booked = $request->input('is_booked', '');
         $tg_req = $request->input('t_g_req', '');
@@ -52,15 +54,16 @@ class ReportController extends Controller
         ->Where('visit_reservations.tour_guide_requested','like', "%{$tg_req}%")
         ->Where('visit_reservations.tour_guide_assign','like', "%{$tg_assign}%")
         ->Where('visit_reservations.is_confirm','like', "%{$is_confirm}%")
+        ->whereBetween('schedule.tanggal', [$fromDate, $toDate])
         ->orderBy($sortBy, $order)
         ->select('visit_reservations.*')
         ->paginate($perPage);
 
         if ($request->ajax()) {
-            return view('report.table', compact('visitSchedules', 'search', 'sortBy', 'order', 'perPage'));
+            return view('report.table', compact('visitSchedules', 'search', 'sortBy', 'order', 'perPage', 'fromDate', 'toDate'));
         }
 
-        return view('report.index', compact('visitSchedules', 'search', 'sortBy', 'order', 'perPage'));
+        return view('report.index', compact('visitSchedules', 'search', 'sortBy', 'order', 'perPage', 'fromDate', 'toDate'));
     }
 
     public function exportExcel(Request $request)
@@ -68,6 +71,8 @@ class ReportController extends Controller
         $search = $request->input('search', '');
         $sortBy = $request->input('sort_by', 'created_at');
         $order = $request->input('order', 'desc');
+        $fromDate = $request->input('from_date', now()->toDateString());
+        $toDate = $request->input('to_date', now()->addDays(7)->toDateString());
         $is_available = $request->input('is_available', '');
         $is_booked = $request->input('is_booked', '');
         $tg_req = $request->input('t_g_req', '');
@@ -93,6 +98,7 @@ class ReportController extends Controller
         ->Where('visit_reservations.tour_guide_requested','like', "%{$tg_req}%")
         ->Where('visit_reservations.tour_guide_assign','like', "%{$tg_assign}%")
         ->Where('visit_reservations.is_confirm','like', "%{$is_confirm}%")
+        ->whereBetween('schedule.tanggal', [$fromDate, $toDate])
         ->orderBy($sortBy, $order)
         ->select('visit_reservations.*')
         ->get();
@@ -106,6 +112,8 @@ class ReportController extends Controller
         $search = $request->input('search', '');
         $sortBy = $request->input('sort_by', 'created_at');
         $order = $request->input('order', 'desc');
+        $fromDate = $request->input('from_date', now()->toDateString());
+        $toDate = $request->input('to_date', now()->addDays(7)->toDateString());
         $is_available = $request->input('is_available', '');
         $is_booked = $request->input('is_booked', '');
         $tg_req = $request->input('t_g_req', '');
@@ -131,6 +139,7 @@ class ReportController extends Controller
         ->Where('visit_reservations.tour_guide_requested','like', "%{$tg_req}%")
         ->Where('visit_reservations.tour_guide_assign','like', "%{$tg_assign}%")
         ->Where('visit_reservations.is_confirm','like', "%{$is_confirm}%")
+        ->whereBetween('schedule.tanggal', [$fromDate, $toDate])
         ->orderBy($sortBy, $order)
         ->select('visit_reservations.*')
         ->get();
