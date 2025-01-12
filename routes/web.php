@@ -45,6 +45,57 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
+//route for humas
+Route::middleware(['auth', RoleMiddleware::class . ':admin,humas,visitor'])->group(function () {
+    //Visit Schedule Route
+    Route::resource('visitSchedules', VisitScheduleController::class);
+        //Add a route to toggle booking Jadwal
+        Route::post('/visitSchedules/{id}/cancelBooking', [VisitScheduleController::class, 'cancel_booking'])->name('visitSchedules.cancelBooking');
+
+
+    //Visit Reservation Route
+    Route::resource('visitReservations', VisitReservationController::class);
+});
+
+Route::middleware(['auth', RoleMiddleware::class . ':admin,humas'])->group(function () {
+    //Add a route to toggle item active status
+    Route::post('/visitSchedules/{id}/toggleStatus', [VisitScheduleController::class, 'toggleStatus'])->name('visitSchedules.toggleStatus');
+    //Add a route to toggle pengajuan Tour Guide
+    Route::post('/visitSchedules/{id}/ReqTourGuide', [VisitScheduleController::class, 'RequestTourGuide'])->name('visitSchedules.ReqTourGuide');
+    //Add a route to toggle konfirmasi kunjungan
+    Route::post('/visitSchedules/{id}/ConfirmVisit', [VisitScheduleController::class, 'confirmVisit'])->name('visitSchedules.ConfirmVisit');
+});
+
+//route for koordinator
+Route::middleware(['auth', RoleMiddleware::class . ':admin,koordinator'])->group(function () {
+    //Assign Tour Guide Route
+    Route::resource('assignTourGuides', AssignTourGuideController::class);
+});
+
+//route for visitor
+Route::middleware(['auth', RoleMiddleware::class . ':admin,building,humas'])->group(function () {
+    //Report Kunjungan
+    Route::get('reports', [ReportController::class, 'index'])->name('report.index');
+    Route::get('/report/export-excel', [ReportController::class, 'exportExcel'])->name('report.export.excel');
+    Route::get('/report/export-pdf', [ReportController::class, 'exportPDF'])->name('report.export.pdf');
+
+
+    //Report Building
+    Route::get('reportbuildings', [ReportBuildingController::class, 'index'])->name('reportbuilding.index');
+    Route::get('/reportbuildings/export-excel', [ReportBuildingController::class, 'exportExcel'])->name('reportbuilding.export.excel');
+    Route::get('/reportbuildings/export-pdf', [ReportBuildingController::class, 'exportPDF'])->name('reportbuilding.export.pdf');
+});
+
+//route for building
+Route::middleware(['auth', RoleMiddleware::class . ':admin,building,humas'])->group(function () {
+    //Building Schedule Route
+    Route::resource('buildingSchedules', BuildingScheduleController::class);
+        //Add a route to toggle item active status
+        Route::post('/buildingSchedules/{id}/toggleStatus', [BuildingScheduleController::class, 'toggleStatus'])->name('buildingSchedules.toggleStatus');
+        //Add a route to toggle booking gedung
+        Route::post('/buildingSchedules/{id}/bookingGedung', [BuildingScheduleController::class, 'booking'])->name('buildingSchedules.bookingGedung');
+});
+
 //route for admin
 Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function () {
     //User Route
@@ -64,39 +115,5 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
         //Add a route to toggle item active status
         Route::post('/tourGuides/{id}/toggleStatus', [TourGuideController::class, 'toggleStatus'])->name('tourGuides.toggleStatus');
 
-    //Building Schedule Route
-    Route::resource('buildingSchedules', BuildingScheduleController::class);
-        //Add a route to toggle item active status
-        Route::post('/buildingSchedules/{id}/toggleStatus', [BuildingScheduleController::class, 'toggleStatus'])->name('buildingSchedules.toggleStatus');
-        //Add a route to toggle booking gedung
-        Route::post('/buildingSchedules/{id}/bookingGedung', [BuildingScheduleController::class, 'booking'])->name('buildingSchedules.bookingGedung');
-
-    //Visit Schedule Route
-    Route::resource('visitSchedules', VisitScheduleController::class);
-        //Add a route to toggle item active status
-        Route::post('/visitSchedules/{id}/toggleStatus', [VisitScheduleController::class, 'toggleStatus'])->name('visitSchedules.toggleStatus');
-        //Add a route to toggle booking Jadwal
-        Route::post('/visitSchedules/{id}/cancelBooking', [VisitScheduleController::class, 'cancel_booking'])->name('visitSchedules.cancelBooking');
-        //Add a route to toggle pengajuan Tour Guide
-        Route::post('/visitSchedules/{id}/ReqTourGuide', [VisitScheduleController::class, 'RequestTourGuide'])->name('visitSchedules.ReqTourGuide');
-        //Add a route to toggle konfirmasi kunjungan
-        Route::post('/visitSchedules/{id}/ConfirmVisit', [VisitScheduleController::class, 'confirmVisit'])->name('visitSchedules.ConfirmVisit');
-
-    //Assign Tour Guide Route
-    Route::resource('assignTourGuides', AssignTourGuideController::class);
-
-    //Visit Reservation Route
-    Route::resource('visitReservations', VisitReservationController::class);
-
-    //Report Kunjungan
-    Route::get('reports', [ReportController::class, 'index'])->name('report.index');
-    Route::get('/report/export-excel', [ReportController::class, 'exportExcel'])->name('report.export.excel');
-    Route::get('/report/export-pdf', [ReportController::class, 'exportPDF'])->name('report.export.pdf');
-
-
-    //Report Building
-    Route::get('reportbuildings', [ReportBuildingController::class, 'index'])->name('reportbuilding.index');
-    Route::get('/reportbuildings/export-excel', [ReportBuildingController::class, 'exportExcel'])->name('reportbuilding.export.excel');
-    Route::get('/reportbuildings/export-pdf', [ReportBuildingController::class, 'exportPDF'])->name('reportbuilding.export.pdf');
 
 });

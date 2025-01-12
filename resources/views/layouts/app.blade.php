@@ -157,23 +157,31 @@
                         <i class="fas fa-exchange-alt"></i> Transaksi
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="transaksiDropdown">
-                        <li><a class="dropdown-item" href="{{ route('buildingSchedules.index') }}"><i class="fas fa-calendar-alt"></i> Jadwal Gedung</a></li>
-                        <li><a class="dropdown-item" href="{{ route('visitSchedules.index') }}"><i class="fas fa-calendar-check"></i> Jadwal Kunjungan</a></li>
-                        <li><a class="dropdown-item" href="{{ route('visitReservations.index') }}"><i class="fas fa-bookmark"></i> Reservasi Kunjungan</a></li>
-                        <li><a class="dropdown-item" href="{{ route('assignTourGuides.index') }}"><i class="fas fa-user-plus"></i> Penunjukan Tour Guide</a></li>
+                        @if (auth()->user()->role === 'admin' or auth()->user()->role === 'humas' or auth()->user()->role === 'building')
+                            <li><a class="dropdown-item" href="{{ route('buildingSchedules.index') }}"><i class="fas fa-calendar-alt"></i> Jadwal Gedung</a></li>
+                        @endif
+                        @if (auth()->user()->role === 'admin' or auth()->user()->role === 'humas' or auth()->user()->role === 'visitor')
+                            <li><a class="dropdown-item" href="{{ route('visitSchedules.index') }}"><i class="fas fa-calendar-check"></i> Jadwal Kunjungan</a></li>
+                            <li><a class="dropdown-item" href="{{ route('visitReservations.index') }}"><i class="fas fa-bookmark"></i> Reservasi Kunjungan</a></li>
+                        @endif
+                        @if (auth()->user()->role === 'admin' or auth()->user()->role === 'koordinator')
+                            <li><a class="dropdown-item" href="{{ route('assignTourGuides.index') }}"><i class="fas fa-user-plus"></i> Penunjukan Tour Guide</a></li>
+                        @endif
                     </ul>
                 </li>
 
                 <!-- Report Dropdown -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="reportDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-chart-bar"></i> Laporan
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="reportDropdown">
-                        <li><a class="dropdown-item" href="{{ route('report.index') }}"><i class="fas fa-chart-line"></i> Laporan Kunjungan</a></li>
-                        <li><a class="dropdown-item" href="{{ route('reportbuilding.index') }}"><i class="fas fa-chart-line"></i> Laporan Jadwal Gedung</a></li>
-                    </ul>
-                </li>
+                @if (auth()->user()->role === 'admin' or auth()->user()->role === 'humas' or auth()->user()->role === 'building')
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="reportDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-chart-bar"></i> Laporan
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="reportDropdown">
+                            <li><a class="dropdown-item" href="{{ route('report.index') }}"><i class="fas fa-chart-line"></i> Laporan Kunjungan</a></li>
+                            <li><a class="dropdown-item" href="{{ route('reportbuilding.index') }}"><i class="fas fa-chart-line"></i> Laporan Jadwal Gedung</a></li>
+                        </ul>
+                    </li>
+                @endif
                 <!-- User Account Dropdown -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">

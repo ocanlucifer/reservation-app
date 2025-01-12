@@ -13,31 +13,34 @@
                             {{ !$buildingSchedule->is_available ? 'disabled' : '' }}>
                         <i class="bi bi-calendar-check"></i>
                     </button>
-                    <button class="btn btn-warning btn-sm edit-buildingSchedule"
-                            data-id="{{ $buildingSchedule->id }}"
-                            data-building_id="{{ $buildingSchedule->building_id }}"
-                            data-tanggal="{{ $buildingSchedule->tanggal }}"
-                            data-start_time="{{ $buildingSchedule->start_time }}"
-                            data-end_time="{{ $buildingSchedule->end_time }}"
-                            data-status="{{ $buildingSchedule->is_available }}"
-                            data-bs-toggle="tooltip" title="Ubah"
-                            {{ $buildingSchedule->is_booked ? 'disabled' : '' }}>
-                        <i class="bi bi-pencil-square"></i>
-                    </button>
-                    <button class="btn btn-danger btn-sm delete-buildingSchedule"
-                            data-id="{{ $buildingSchedule->id }}"
-                            data-name="{{ $buildingSchedule->transaction_number }}"
-                            data-bs-toggle="tooltip" title="Hapus"
-                            {{ $buildingSchedule->is_booked ? 'disabled' : '' }}>
-                        <i class="bi bi-trash"></i>
-                    </button>
-                    <button type="submit" class="btn btn-sm {{ $buildingSchedule->is_available ? 'btn-secondary' : 'btn-success' }} toggleStatus"
-                            data-id="{{ $buildingSchedule->id }}"
-                            data-status="{{ $buildingSchedule->is_available ? 'Tidak' : 'Ya' }}"
-                            data-bs-toggle="tooltip" title="{{ $buildingSchedule->is_available ? 'Tidak tersedia' : 'Tersedia' }}"
-                            {{ $buildingSchedule->is_booked ? 'disabled' : '' }}>
-                        <i class="bi {{ $buildingSchedule->is_available ? 'bi-toggle-on' : 'bi-toggle-off' }}"></i>
-                    </button>
+                    @if (auth()->user()->role === 'admin' or auth()->user()->role === 'building')
+                        <button class="btn btn-warning btn-sm edit-buildingSchedule"
+                                data-id="{{ $buildingSchedule->id }}"
+                                data-building_id="{{ $buildingSchedule->building_id }}"
+                                data-tanggal="{{ $buildingSchedule->tanggal }}"
+                                data-start_time="{{ $buildingSchedule->start_time }}"
+                                data-end_time="{{ $buildingSchedule->end_time }}"
+                                data-status="{{ $buildingSchedule->is_available }}"
+                                data-bs-toggle="tooltip" title="Ubah"
+                                {{ $buildingSchedule->is_booked ? 'disabled' : '' }}>
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+                        <button class="btn btn-danger btn-sm delete-buildingSchedule"
+                                data-id="{{ $buildingSchedule->id }}"
+                                data-name="{{ $buildingSchedule->transaction_number }}"
+                                data-bs-toggle="tooltip" title="Hapus"
+                                {{ $buildingSchedule->is_booked ? 'disabled' : '' }}>
+                            <i class="bi bi-trash"></i>
+                        </button>
+                        <button type="submit" class="btn btn-sm {{ $buildingSchedule->is_available ? 'btn-secondary' : 'btn-success' }} toggleStatus"
+                                data-id="{{ $buildingSchedule->id }}"
+                                data-status="{{ $buildingSchedule->is_available ? 'Tidak' : 'Ya' }}"
+                                data-bs-toggle="tooltip" title="{{ $buildingSchedule->is_available ? 'Tidak tersedia' : 'Tersedia' }}"
+                                {{ $buildingSchedule->is_booked ? 'disabled' : '' }}>
+                            <i class="bi {{ $buildingSchedule->is_available ? 'bi-toggle-on' : 'bi-toggle-off' }}"></i>
+                        </button>
+                    @endif
+
                 </div>
             </div>
             <div class="card-body p-3">
