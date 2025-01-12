@@ -17,6 +17,8 @@ class BuildingScheduleController extends Controller
         $search = $request->input('search', '');
         $sortBy = $request->input('sort_by', 'created_at');
         $order = $request->input('order', 'desc');
+        $fromDate = $request->input('from_date', now()->toDateString());
+        $toDate = $request->input('to_date', now()->addDays(7)->toDateString());
         $perPage = $request->input('per_page', 10);
         $is_available = $request->input('is_available', '');
         $is_booked = $request->input('is_booked', '');
@@ -34,6 +36,7 @@ class BuildingScheduleController extends Controller
                 $q->where('name', 'like', "%{$search}%"); // Filter berdasarkan nama gedung
             })->orWhere('tanggal', 'like', "%{$search}%");
         })
+        ->whereBetween('tanggal', [$fromDate, $toDate])
         ->Where('is_available','like', "%{$is_available}%")
         ->Where('is_booked','like', "%{$is_booked}%")
         ->orderBy($sortBy, $order)
@@ -42,10 +45,10 @@ class BuildingScheduleController extends Controller
         $buildings = Building::isActive()->get();
 
         if ($request->ajax()) {
-            return view('building_schedule.table', compact('buildingSchedules', 'buildings', 'search', 'sortBy', 'order', 'perPage'));
+            return view('building_schedule.table', compact('buildingSchedules', 'buildings', 'search', 'sortBy', 'order', 'perPage', 'fromDate', 'toDate'));
         }
 
-        return view('building_schedule.index', compact('buildingSchedules', 'buildings', 'search', 'sortBy', 'order', 'perPage'));
+        return view('building_schedule.index', compact('buildingSchedules', 'buildings', 'search', 'sortBy', 'order', 'perPage', 'fromDate', 'toDate'));
     }
 
     public function store(Request $request)

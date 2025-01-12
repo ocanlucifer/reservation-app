@@ -18,6 +18,8 @@ class AssignTourGuideController extends Controller
         $sortBy = $request->input('sort_by', 'created_at');
         $order = $request->input('order', 'desc');
         $perPage = $request->input('per_page', 10);
+        $fromDate = $request->input('from_date', now()->toDateString());
+        $toDate = $request->input('to_date', now()->addDays(7)->toDateString());
         $tg_assign = $request->input('t_g_assign', '');
         $is_confirm = $request->input('is_confirm', '');
 
@@ -47,6 +49,7 @@ class AssignTourGuideController extends Controller
         ->Where('visit_reservations.tour_guide_requested',true)
         ->Where('visit_reservations.tour_guide_assign','like', "%{$tg_assign}%")
         ->Where('visit_reservations.is_confirm','like', "%{$is_confirm}%")
+        ->whereBetween('schedule.tanggal', [$fromDate, $toDate])
         ->orderBy($sortBy, $order)
         ->select('visit_reservations.*')
         ->paginate($perPage);
@@ -54,10 +57,10 @@ class AssignTourGuideController extends Controller
         $tourguides = TourGuide::isActive()->get();
 
         if ($request->ajax()) {
-            return view('tour_guide_assign.table', compact('visitSchedules', 'tourguides', 'search', 'sortBy', 'order', 'perPage'));
+            return view('tour_guide_assign.table', compact('visitSchedules', 'tourguides', 'search', 'sortBy', 'order', 'perPage', 'fromDate', 'toDate'));
         }
 
-        return view('tour_guide_assign.index', compact('visitSchedules', 'tourguides', 'search', 'sortBy', 'order', 'perPage'));
+        return view('tour_guide_assign.index', compact('visitSchedules', 'tourguides', 'search', 'sortBy', 'order', 'perPage', 'fromDate', 'toDate'));
     }
 
     public function update(Request $request, $id)

@@ -17,7 +17,7 @@
     <form id="filter-form" class="mb-4">
         <div class="row g-2 justify-content-end">
             <!-- Search Input -->
-            <div class="col-md-12 position-relative">
+            <div class="col-md-8 position-relative">
                 <input
                     type="text"
                     name="search"
@@ -27,6 +27,15 @@
                     value="{{ $search }}"
                 />
                 <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3"></i> <!-- Icon inside the input -->
+            </div>
+            <div class="col-auto ms-auto">
+                <input type="date" name="from_date" class="form-control form-control-sm" value="{{ $fromDate }}">
+            </div>
+            <div class="col-auto">
+                -
+            </div>
+            <div class="col-auto">
+                <input type="date" name="to_date" class="form-control form-control-sm" value="{{ $toDate }}">
             </div>
         </div>
         <div class="col-md-12 mt-3 justify-content-end">
@@ -141,6 +150,11 @@
         // Trigger search when typing in search input
         $('#filter-form').on('keyup', '#search', function() {
             fetchbuildingSchedules();
+        });
+
+        // Event listener for changes in date inputs
+        $('#filter-form').on('change', 'input[type="date"]', function() {
+            fetchbuildingSchedules();  // Fetch data on any form input change
         });
 
         // Event handler for pagination links
