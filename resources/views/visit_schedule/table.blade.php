@@ -5,23 +5,40 @@
             <div class="card-header bg-dark text-white p-3 d-flex justify-content-between align-items-center">
                 <h6 class="card-title mb-0">{{ $visitSchedule->schedule->building->name }}</h6>
                 <div>
-                    <button class="btn {{ $visitSchedule->is_confirm ? 'btn-danger' : 'btn-success' }} btn-sm confirm-visit"
-                        data-id="{{ $visitSchedule->id }}"
-                        data-status="{{ $visitSchedule->is_confirm ? 'Batalkan Konfirmasi' : 'Konfirmasi' }}"
-                        data-bs-toggle="tooltip"
-                        title="{{ $visitSchedule->is_confirm ? 'Batalkan Konfirmasi' : 'Konfirmasi' }}"
-                        {{ !$visitSchedule->tour_guide_assign ? 'hidden' : '' }}>
-                        <i class="bi {{ $visitSchedule->is_confirm ? 'bi-x-circle' : 'bi-check-circle' }}"></i>
-                    </button>
-                    <button class="btn btn-info btn-sm request-tour-guide"
-                        data-id="{{ $visitSchedule->id }}"
-                        data-status="{{ $visitSchedule->tour_guide_requested ? 'Batalkan Pengajuan' : 'Ajukan' }}"
-                        data-bs-toggle="tooltip"
-                        title="{{ $visitSchedule->tour_guide_requested ? 'Batalkan Pengajuan Tour Guide' : 'Ajukan Tour Guide' }}"
-                        {{ $visitSchedule->tour_guide_assign ? 'hidden' : '' }}
-                        {{ !$visitSchedule->is_booked ? 'hidden' : '' }}>
-                        <i class="bi bi-person-lines-fill"></i>
-                    </button>
+                    @if (auth()->user()->role === 'admin' or auth()->user()->role === 'humas')
+                        <button class="btn {{ $visitSchedule->is_confirm ? 'btn-danger' : 'btn-success' }} btn-sm confirm-visit"
+                            data-id="{{ $visitSchedule->id }}"
+                            data-status="{{ $visitSchedule->is_confirm ? 'Batalkan Konfirmasi' : 'Konfirmasi' }}"
+                            data-bs-toggle="tooltip"
+                            title="{{ $visitSchedule->is_confirm ? 'Batalkan Konfirmasi' : 'Konfirmasi' }}"
+                            {{ !$visitSchedule->tour_guide_assign ? 'hidden' : '' }}>
+                            <i class="bi {{ $visitSchedule->is_confirm ? 'bi-x-circle' : 'bi-check-circle' }}"></i>
+                        </button>
+                        <button class="btn btn-info btn-sm request-tour-guide"
+                            data-id="{{ $visitSchedule->id }}"
+                            data-status="{{ $visitSchedule->tour_guide_requested ? 'Batalkan Pengajuan' : 'Ajukan' }}"
+                            data-bs-toggle="tooltip"
+                            title="{{ $visitSchedule->tour_guide_requested ? 'Batalkan Pengajuan Tour Guide' : 'Ajukan Tour Guide' }}"
+                            {{ $visitSchedule->tour_guide_assign ? 'hidden' : '' }}
+                            {{ !$visitSchedule->is_booked ? 'hidden' : '' }}>
+                            <i class="bi bi-person-lines-fill"></i>
+                        </button>
+                        <button class="btn btn-danger btn-sm delete-buildingSchedule"
+                                data-id="{{ $visitSchedule->id }}"
+                                data-name="{{ $visitSchedule->transaction_number }}"
+                                data-bs-toggle="tooltip" title="Hapus"
+                                {{ $visitSchedule->is_booked ? 'hidden' : '' }}>
+                            <i class="bi bi-trash"></i>
+                        </button>
+                        <button type="submit" class="btn btn-sm {{ $visitSchedule->is_available ? 'btn-secondary' : 'btn-success' }} toggleStatus"
+                                data-id="{{ $visitSchedule->id }}"
+                                data-status="{{ $visitSchedule->is_available ? 'Tidak' : 'Ya' }}"
+                                data-bs-toggle="tooltip" title="{{ $visitSchedule->is_available ? 'Tidak tersedia' : 'Tersedia' }}"
+                                {{ $visitSchedule->is_booked ? 'hidden' : '' }}>
+                            <i class="bi {{ $visitSchedule->is_available ? 'bi-toggle-on' : 'bi-toggle-off' }}"></i>
+                        </button>
+                    @endif
+
                     <button class="btn {{ $visitSchedule->is_booked ? 'btn-warning' : 'btn-primary' }} btn-sm booking_form"
                             data-id="{{ $visitSchedule->id }}"
                             data-company="{{ $visitSchedule->visitor_company }}"
@@ -45,20 +62,6 @@
                             {{ $visitSchedule->tour_guide_assign ? 'hidden' : '' }}
                             {{ $visitSchedule->tour_guide_requested ? 'disabled' : '' }}>
                         <i class="bi bi-calendar-x"></i>
-                    </button>
-                    <button class="btn btn-danger btn-sm delete-buildingSchedule"
-                            data-id="{{ $visitSchedule->id }}"
-                            data-name="{{ $visitSchedule->transaction_number }}"
-                            data-bs-toggle="tooltip" title="Hapus"
-                            {{ $visitSchedule->is_booked ? 'hidden' : '' }}>
-                        <i class="bi bi-trash"></i>
-                    </button>
-                    <button type="submit" class="btn btn-sm {{ $visitSchedule->is_available ? 'btn-secondary' : 'btn-success' }} toggleStatus"
-                            data-id="{{ $visitSchedule->id }}"
-                            data-status="{{ $visitSchedule->is_available ? 'Tidak' : 'Ya' }}"
-                            data-bs-toggle="tooltip" title="{{ $visitSchedule->is_available ? 'Tidak tersedia' : 'Tersedia' }}"
-                            {{ $visitSchedule->is_booked ? 'hidden' : '' }}>
-                        <i class="bi {{ $visitSchedule->is_available ? 'bi-toggle-on' : 'bi-toggle-off' }}"></i>
                     </button>
                 </div>
             </div>
