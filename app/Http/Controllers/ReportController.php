@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\BuildingSchedule;
 use App\Models\VisitReservation;
 use Carbon\Carbon;
-use DB;
+
 use App\Exports\VisitReservationsExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
