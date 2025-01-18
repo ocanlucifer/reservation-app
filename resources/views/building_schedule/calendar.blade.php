@@ -5,6 +5,9 @@
     <div id="success-message" class="alert alert-success d-none" role="alert">
         Data Jadwal Gedung berhasil di simpan!
     </div>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="mb-0">Jadwal Gedung</h1>
+    </div>
     <div id="calendar"></div>
 
     <!-- Modal for Create/Edit Schedule Form -->
@@ -217,7 +220,8 @@
                     <td>
                         <button class="btn btn-primary btn-sm booking"
                             data-id="${schedule.id}"
-                            ${!schedule.is_available ? 'disabled' : ''}>
+                            ${!schedule.is_available ? 'disabled' : ''}
+                            data-bs-toggle="tooltip" title="Reservasi">
                             <i class="bi bi-calendar-check"></i>
                         </button>
                         @if (auth()->user()->role === 'admin' or auth()->user()->role === 'building')

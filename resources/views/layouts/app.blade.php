@@ -168,8 +168,8 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="transaksiDropdown">
                         @if (auth()->user()->role === 'admin' or auth()->user()->role === 'humas' or auth()->user()->role === 'building')
-                            <li><a class="dropdown-item" href="{{ route('buildingSchedules.index') }}"><i class="fas fa-calendar-day"></i> Jadwal Gedung</a></li>
-                            <li><a class="dropdown-item" href="{{ route('building-schedules.calendar') }}"><i class="fas fa-calendar-alt"></i> Inventori Gedung</a></li>
+                            <li><a class="dropdown-item" href="{{ route('buildingSchedules.index') }}"><i class="fas fa-calendar-day"></i> Kelola Jadwal Gedung</a></li>
+                            <li><a class="dropdown-item" href="{{ route('building-schedules.calendar') }}"><i class="fas fa-calendar-alt"></i> Jadwal Gedung</a></li>
                         @endif
                         @if (auth()->user()->role === 'admin' or auth()->user()->role === 'humas' or auth()->user()->role === 'visitor')
                             <li><a class="dropdown-item" href="{{ route('visitSchedules.index') }}"><i class="fas fa-calendar-check"></i> Jadwal Kunjungan</a></li>
