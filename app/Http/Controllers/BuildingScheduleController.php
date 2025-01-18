@@ -234,5 +234,40 @@ class BuildingScheduleController extends Controller
         return response()->json(['success' => 'Status Jadwal Gedung Berhasil di Pesan!']);
     }
 
+    public function getSchedules(Request $request)
+    {
+        $schedules = BuildingSchedule::with('building')
+            ->whereBetween('tanggal', [$request->start_date, $request->end_date])
+            ->get();
+
+        $events = $schedules->map(function ($schedule) {
+            return [
+                'id' => $schedule->id,
+                'title' => $schedule->building->name,
+                'start' => $schedule->tanggal . 'T' . \Carbon\Carbon::parse($schedule->start_time)->format('H:i'),
+                'end' => $schedule->tanggal . 'T' . \Carbon\Carbon::parse($schedule->end_time)->format('H:i'),
+                'color' => $schedule->is_available ? 'green' : ($schedule->is_booked ? 'red' : 'gray'),
+                'start_time' => \Carbon\Carbon::parse($schedule->start_time)->format('H:i'),
+                'end_time'  => \Carbon\Carbon::parse($schedule->end_time)->format('H:i'),
+                'is_available' => $schedule->is_available,
+                'is_booked' => $schedule->is_booked,
+                'tanggal'   => $schedule->tanggal,
+                'building_id' => $schedule->building_id,
+            ];
+        });
+
+        return response()->json($events);
+    }
+
+    public function calendar()
+    {
+        // Periksa dan update status jadwal yang sudah lewat
+        BuildingSchedule::where('tanggal', '<', Carbon::now()->toDateString())
+            ->where('is_available', true) // Ganti 'tersedia' dengan status aktif Anda
+            ->update(['is_available' => false]); // Ganti 'tidak tersedia' dengan status tidak aktif Anda
+        $buildings = Building::isActive()->get();
+        return view('building_schedule.calendar', compact('buildings'));
+    }
+
 
 }

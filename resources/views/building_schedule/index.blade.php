@@ -111,7 +111,7 @@
         @include('building_schedule.table')
     </div>
 
-    <!-- Modal for Create/Edit User Form -->
+    <!-- Modal for Create/Edit Schedule Form -->
     <div class="modal fade" id="buildingScheduleModal" tabindex="-1" aria-labelledby="buildingScheduleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -223,7 +223,7 @@
             });
         });
 
-        // Open the Create user form
+        // Open the Create Schedule form
         $('#open-create-form').on('click', function() {
             $('#buildingScheduleModalLabel').text('Buat Jadwal Gedung');
             $('#buildingSchedule-form')[0].reset(); // Clear form
@@ -231,7 +231,7 @@
             $('#buildingScheduleModal').modal('show');
         });
 
-        // Open the Edit user form
+        // Open the Edit Schedule form
         $(document).on('click', '.edit-buildingSchedule', function() {
             const buildingScheduleId = $(this).data('id');
             const building_id = $(this).data('building_id');

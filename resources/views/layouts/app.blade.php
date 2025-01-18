@@ -8,13 +8,15 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet" />
 
 
 
     <!-- Tambahkan jQuery CDN sebelum script lainnya -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
 
     <style>
         .navbar {
@@ -119,6 +121,14 @@
             color: #f8f9fa; /* Lighter shade on hover */
         }
 
+        /* Warna untuk hari ini */
+        .past-date {
+            background-color: rgb(241, 241, 241) !important;
+        }
+        .today-date {
+            background-color: rgb(251, 255, 197) !important;
+        }
+
     </style>
     @stack('styles')
 </head>
@@ -158,7 +168,8 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="transaksiDropdown">
                         @if (auth()->user()->role === 'admin' or auth()->user()->role === 'humas' or auth()->user()->role === 'building')
-                            <li><a class="dropdown-item" href="{{ route('buildingSchedules.index') }}"><i class="fas fa-calendar-alt"></i> Jadwal Gedung</a></li>
+                            <li><a class="dropdown-item" href="{{ route('buildingSchedules.index') }}"><i class="fas fa-calendar-day"></i> Jadwal Gedung</a></li>
+                            <li><a class="dropdown-item" href="{{ route('building-schedules.calendar') }}"><i class="fas fa-calendar-alt"></i> Inventori Gedung</a></li>
                         @endif
                         @if (auth()->user()->role === 'admin' or auth()->user()->role === 'humas' or auth()->user()->role === 'visitor')
                             <li><a class="dropdown-item" href="{{ route('visitSchedules.index') }}"><i class="fas fa-calendar-check"></i> Jadwal Kunjungan</a></li>
