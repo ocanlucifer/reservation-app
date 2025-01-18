@@ -72,7 +72,7 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin,koordinator'])->group
     Route::resource('assignTourGuides', AssignTourGuideController::class);
 });
 
-//route for visitor
+//route for admin building humas
 Route::middleware(['auth', RoleMiddleware::class . ':admin,building,humas'])->group(function () {
     //Report Kunjungan
     Route::get('reports', [ReportController::class, 'index'])->name('report.index');
@@ -84,16 +84,22 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin,building,humas'])->gr
     Route::get('reportbuildings', [ReportBuildingController::class, 'index'])->name('reportbuilding.index');
     Route::get('/reportbuildings/export-excel', [ReportBuildingController::class, 'exportExcel'])->name('reportbuilding.export.excel');
     Route::get('/reportbuildings/export-pdf', [ReportBuildingController::class, 'exportPDF'])->name('reportbuilding.export.pdf');
-});
+// });
 
-//route for building
-Route::middleware(['auth', RoleMiddleware::class . ':admin,building,humas'])->group(function () {
+// //route for building
+// Route::middleware(['auth', RoleMiddleware::class . ':admin,building,humas'])->group(function () {
     //Building Schedule Route
     Route::resource('buildingSchedules', BuildingScheduleController::class);
         //Add a route to toggle item active status
         Route::post('/buildingSchedules/{id}/toggleStatus', [BuildingScheduleController::class, 'toggleStatus'])->name('buildingSchedules.toggleStatus');
         //Add a route to toggle booking gedung
         Route::post('/buildingSchedules/{id}/bookingGedung', [BuildingScheduleController::class, 'booking'])->name('buildingSchedules.bookingGedung');
+
+        Route::get('/api/building-schedules', [BuildingScheduleController::class, 'getSchedules']);
+
+        Route::get('/building-schedules/calendar', [BuildingScheduleController::class, 'calendar'])->name('building-schedules.calendar');
+
+
 });
 
 //route for admin
