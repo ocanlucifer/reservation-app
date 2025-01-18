@@ -72,7 +72,7 @@
                         <p class="card-text mb-1">
                             @if ($visitSchedule->tour_guide_assign)
                                 <span class="badge bg-success">
-                                    Tour Guide: {{ $visitSchedule->tourGuide->name }} ditugaskan oleh: {{ $visitSchedule->koordinator->name }} ({{ $visitSchedule->tour_guide_assign_date }})
+                                    Tour Guide: {{ $visitSchedule->tour_guide_id ? $visitSchedule->tourGuide->name : '' }} ditugaskan oleh: {{ $visitSchedule->koordinator_id ? $visitSchedule->koordinator->name : '' }} ({{ $visitSchedule->tour_guide_assign_date }})
                                 </span>
                             @else
                                 <span class="badge bg-danger">Belum Mendapatkan Tour Guide</span>

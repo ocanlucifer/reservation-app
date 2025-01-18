@@ -47,6 +47,7 @@ class AssignTourGuideController extends Controller
             });
         })
         ->Where('visit_reservations.tour_guide_requested',true)
+        // ->Where('visit_reservations.is_confirm',false)
         ->Where('visit_reservations.tour_guide_assign','like', "%{$tg_assign}%")
         ->Where('visit_reservations.is_confirm','like', "%{$is_confirm}%")
         ->whereBetween('schedule.tanggal', [$fromDate, $toDate])

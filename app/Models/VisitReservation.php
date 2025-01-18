@@ -14,7 +14,7 @@ class VisitReservation extends Model
         'building_schedule_id',
         'visitor_company',
         'visitor_address',
-        'visitor_address',
+        'visitor_purphose',
         'visitor_contact',
         'visitor_person',
         'visitor_note',

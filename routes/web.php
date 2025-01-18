@@ -52,9 +52,13 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin,humas,visitor'])->gro
         //Add a route to toggle booking Jadwal
         Route::post('/visitSchedules/{id}/cancelBooking', [VisitScheduleController::class, 'cancel_booking'])->name('visitSchedules.cancelBooking');
 
-
     //Visit Reservation Route
     Route::resource('visitReservations', VisitReservationController::class);
+
+
+    Route::get('/api/reservation-schedules', [VisitReservationController::class, 'getSchedules']);
+
+    Route::get('/reservation-schedules/calendar', [VisitReservationController::class, 'calendar'])->name('reservation-schedules.calendar');
 });
 
 Route::middleware(['auth', RoleMiddleware::class . ':admin,humas'])->group(function () {

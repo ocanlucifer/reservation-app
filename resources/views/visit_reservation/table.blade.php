@@ -3,7 +3,7 @@
     <div class="col-12">
         <div class="card shadow-sm">
             <div class="card-header bg-dark text-white p-3 d-flex justify-content-between align-items-center">
-                <h6 class="card-title mb-0">{{ $visitSchedule->schedule->building->name }}</h6>
+                <h6 class="card-title mb-0">{{ $visitSchedule->schedule->building_id ? $visitSchedule->schedule->building->name : 'Belum di pilihkan Gedung' }}</h6>
                 <div>
                     <button class="btn {{ $visitSchedule->is_booked ? 'btn-warning' : 'btn-primary' }} btn-sm booking_form"
                             data-id="{{ $visitSchedule->id }}"
@@ -71,7 +71,7 @@
                         <p class="card-text mb-1">
                             @if ($visitSchedule->tour_guide_assign)
                                 <span class="badge bg-success">
-                                    Tour Guide: {{ $visitSchedule->tourGuide->name }} ditugaskan oleh: {{ $visitSchedule->koordinator->name }} ({{ $visitSchedule->tour_guide_assign_date }})
+                                    Tour Guide: {{ $visitSchedule->tour_guide_id ? $visitSchedule->tourGuide->name : '' }} ditugaskan oleh: {{ $visitSchedule->koordinator_id ? $visitSchedule->koordinator->name : '' }} ({{ $visitSchedule->tour_guide_assign_date }})
                                 </span>
                             @else
                                 <span class="badge bg-danger">Belum Mendapatkan Tour Guide</span>
