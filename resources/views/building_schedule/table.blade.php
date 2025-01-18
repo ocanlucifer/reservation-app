@@ -3,7 +3,7 @@
     <div class="col">
         <div class="card shadow-sm">
             <div class="card-header bg-dark text-white p-3 d-flex justify-content-between align-items-center">
-                <h6 class="card-title mb-0">{{ $buildingSchedule->building->name }}</h6>
+                <h6 class="card-title mb-0">{{ $buildingSchedule->building_id ? $buildingSchedule->building->name : 'Belum di pilihkan Gedung' }}</h6>
                 <div>
                     <button class="btn btn-primary btn-sm booking"
                             data-id="{{ $buildingSchedule->id }}"
@@ -64,7 +64,7 @@
                     <p class="card-text mb-1">
                         @if ($buildingSchedule->is_booked)
                             <span class="badge bg-success">
-                                di pesan oleh: {{ $buildingSchedule->humas->name }} ( {{ $buildingSchedule->booked_date }})
+                                di pesan oleh: {{ $buildingSchedule->humas_id ? $buildingSchedule->humas->name: '' }} ( {{ $buildingSchedule->humas_id ? $buildingSchedule->booked_date : ''}})
                             </span>
                         @else
                             <span class="badge bg-danger">Belum di pesan</span>

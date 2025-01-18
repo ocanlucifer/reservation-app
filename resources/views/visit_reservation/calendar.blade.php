@@ -6,7 +6,7 @@
         Data Jadwal Gedung berhasil di simpan!
     </div>
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1 class="mb-0">Jadwal Gedung</h1>
+        <h1 class="mb-0">Jadwal Reservasi Kunjungan</h1>
         <!-- Filter, Sort, and Search Form -->
     <form id="filter-form" class="mb-4">
         <div class="col-md-12 mt-3 justify-content-end">
@@ -43,16 +43,6 @@
                         @csrf
                         <input type="hidden" name="id" id="buildingSchedule-id">
                         <input type="hidden" name="visit_id" id="buildingSchedule-visit_id">
-                        <input type="hidden" name="is_available" id="buildingSchedule-status">
-                        <div class="mb-3">
-                            <label for="buildingSchedule-building_id" class="form-label">Gedung</label>
-                            <select id="buildingSchedule-building_id" name="building_id" class="form-select" required>
-                                <option selected>Pilih Gedung</option>
-                                @foreach($buildings as $building)
-                                    <option value="{{ $building->id }}">{{ $building->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
                         <div class="mb-3">
                             <label for="tanggal" class="form-label">Tanggal</label>
                             <input type="date" id="buildingSchedule-tanggal" name="tanggal" class="form-control" required>
@@ -66,12 +56,28 @@
                             <input type="time" id="buildingSchedule-end_time" name="end_time" class="form-control" required>
                         </div>
                         <div class="mb-3">
-                            <label for="visitor_purphose" class="form-label">Kegiatan</label>
+                            <label for="visitor_company" class="form-label">Nama Instansi Pengunjung</label>
+                            <input type="text" id="buildingSchedule-company" name ="visitor_company" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="visitor_adress" class="form-label">Alamat Pengunjung</label>
+                            <input type="text" id="buildingSchedule-address" name ="visitor_address" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="visitor_purphose" class="form-label">Tujuan Kunjungan</label>
                             <input type="text" id="buildingSchedule-purphose" name ="visitor_purphose" class="form-control" required>
                         </div>
                         <div class="mb-3">
-                            <label for="visitor_person" class="form-label">Jumlah Peserta</label>
+                            <label for="visitor_contact" class="form-label">Kontak</label>
+                            <input type="text" id="buildingSchedule-contact" name ="visitor_contact" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="visitor_person" class="form-label">Jumlah Pengunjung</label>
                             <input type="number" id="buildingSchedule-person" name ="visitor_person" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="visitor_note" class="form-label">Catatan</label>
+                            <input type="text" id="buildingSchedule-note" name ="visitor_note" class="form-control" required>
                         </div>
                     </form>
                 </div>
@@ -136,7 +142,7 @@
             height: 600, // Tinggi tetap
             aspectRatio: 1.5, // Rasio tinggi/lebar
             events: function (fetchInfo, successCallback, failureCallback) {
-                fetch(`/api/building-schedules?start_date=${fetchInfo.startStr}&end_date=${fetchInfo.endStr}&gedung_id=${gedung_id}`)
+                fetch(`/api/reservation-schedules?start_date=${fetchInfo.startStr}&end_date=${fetchInfo.endStr}&gedung_id=${gedung_id}`)
                     .then(response => response.json())
                     .then(data => {
                         eventsData = data; // Save events data to global variable
@@ -251,19 +257,10 @@
                     <td>${schedule.start_time} - ${schedule.end_time}</td>
                     <td>${schedule.kegiatan}</td>
                     <td>
-                        <button class="btn ${schedule.is_available ? 'btn-primary' : 'btn-danger'} btn-sm booking"
+                        <button class="btn btn-primary btn-sm booking"
                             data-id="${schedule.id}"
-                            data-building_id="${schedule.building_id }"
-                            data-tanggal="${schedule.tanggal }"
-                            data-start_time="${schedule.start_time }"
-                            data-end_time="${schedule.end_time }"
-                            data-purphose="${schedule.kegiatan }"
-                            data-person="${schedule.peserta }"
-                            data-visit_id="${schedule.visit_id }"
-                            data-status="${schedule.is_available }"
-                            data-is_booked="${schedule.is_booked }"
                             data-status="${schedule.is_booked  ? 'Batalkan Reservasi' : 'Reservasi' }"
-                            data-bs-toggle="tooltip" title="${schedule.is_booked  ? 'Batalkan Reservasi' : 'Reservasi' }">
+                            data-bs-toggle="tooltip" title="${schedule.is_booked  ? 'Batalkan Reservasi' : 'Reservasi' }" hidden>
                             <i class="bi bi-calendar-x"></i>
                         </button>
                         <button class="btn btn-warning btn-sm edit-buildingSchedule"
@@ -275,15 +272,20 @@
                             data-purphose="${schedule.kegiatan }"
                             data-person="${schedule.peserta }"
                             data-visit_id="${schedule.visit_id }"
-                            data-status="${schedule.is_available }"
-                            data-bs-toggle="tooltip" title="Ubah">
+                            data-company="${schedule.company }"
+                            data-address="${schedule.address }"
+                            data-contact="${schedule.contact }"
+                            data-note="${schedule.note }"
+                            data-bs-toggle="tooltip" title="Ubah"
+                            ${!schedule.is_owner  ? 'hidden' : '' }>
                             <i class="bi bi-pencil-square"></i>
                         </button>
                         <button class="btn btn-danger btn-sm delete-buildingSchedule"
                             data-id="${schedule.id}"
                             data-name="${schedule.title}"
-                            data-bs-toggle="tooltip" title="Hapus Reservasi">
-                            <i class="bi bi-trash"></i>
+                            data-bs-toggle="tooltip" title="Batakan Reservasi"
+                            ${!schedule.is_owner  ? 'hidden' : '' }>
+                            <i class="bi bi-calendar-x"></i>
                         </button>
                         <button class="btn btn-sm ${schedule.is_available ? 'btn-secondary' : 'btn-success'} toggleStatus"
                             data-id="${schedule.id}"
@@ -344,6 +346,10 @@
         const kegiatan = $(this).data('purphose');
         const peserta = $(this).data('person');
         const visit_id = $(this).data('visit_id');
+        const company = $(this).data('company');
+        const address = $(this).data('address');
+        const contact = $(this).data('contact');
+        const note = $(this).data('note');
 
         $('#buildingScheduleModalLabel').text('Ubah Jadwal Gedung');
         $('#buildingSchedule-id').val(buildingScheduleId);
@@ -355,6 +361,10 @@
         $('#buildingSchedule-purphose').val(kegiatan);
         $('#buildingSchedule-person').val(peserta);
         $('#buildingSchedule-visit_id').val(visit_id);
+        $('#buildingSchedule-company').val(company);
+        $('#buildingSchedule-address').val(address);
+        $('#buildingSchedule-contact').val(contact);
+        $('#buildingSchedule-note').val(note);
 
         // Close the calendar actions modal
         $('#calendarActionsModal').modal('hide');
@@ -369,7 +379,7 @@
         const formData = $('#buildingSchedule-form').serialize();
         const buildingScheduleId = $('#buildingSchedule-id').val();
 
-        const url = buildingScheduleId ? `/buildingSchedules/${buildingScheduleId}` : '/buildingSchedules';
+        const url = buildingScheduleId ? `/visitReservations/${buildingScheduleId}` : '/visitReservations';
         const method = buildingScheduleId ? 'PUT' : 'POST';
 
         $.ajax({
@@ -403,7 +413,7 @@
         // Confirm before deletion
         if (confirm(`Batalkan Reservasi "${buildingScheduleTrxNo}"?`)) {
             $.ajax({
-                url: `/buildingSchedules/${buildingScheduleId}`,
+                url: `/visitReservations/${buildingScheduleId}`,
                 method: 'DELETE',
                 data: {
                     _token: $('meta[name="csrf-token"]').attr('content') // Include CSRF token
@@ -468,32 +478,37 @@
     // Event listener for the booking button
     $(document).on('click', '.booking', function() {
         const buildingScheduleId = $(this).data('id');
-        const building_id = $(this).data('building_id');
-        const tanggal = $(this).data('tanggal');
-        const start_time = $(this).data('start_time');
-        const end_time = $(this).data('end_time');
-        const kegiatan = $(this).data('purphose');
-        const peserta = $(this).data('person');
-        const visit_id = $(this).data('visit_id');
-        const is_booked = $(this).data('is_booked');
+        const buildingScheduleStatus = $(this).data('status');
+        const buildingScheduleBooked = $(this).data('booked');
 
-        $('#buildingScheduleModalLabel').text(is_booked ? 'Batalkan Reservasi' : 'Booking Jadwal Gedung');
-        $('#buildingSchedule-id').val(buildingScheduleId);
-        $('#buildingSchedule-building_id').val(building_id);
-        $('#buildingSchedule-tanggal').val(tanggal);
-        $('#buildingSchedule-start_time').val(start_time);
-        $('#buildingSchedule-end_time').val(end_time);
-        $('#buildingSchedule-status').val(is_booked ? 1 : 0);
-        $('#buildingSchedule-purphose').val(kegiatan);
-        $('#buildingSchedule-person').val(peserta);
-        $('#buildingSchedule-visit_id').val(visit_id);
+        // Confirm before deletion
+        if (confirm(`"${buildingScheduleStatus}" ?`)) {
+            $.ajax({
+                url: `/buildingSchedules/${buildingScheduleId}/bookingGedung`,
+                method: 'POST',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content') // Include CSRF token
+                },
+                success: function(response) {
+                    // Show success message
+                    // $('#success-message').removeClass('d-none').text(`Jadwal Gedung "${buildingScheduleStatus}" Berhasil!`);
+                    $('#success-message').removeClass('d-none').text(response.success);
 
-        // Close the calendar actions modal
-        $('#calendarActionsModal').modal('hide');
+                    // Close the calendar actions modal
+                    $('#calendarActionsModal').modal('hide');
 
-        // Open the create schedule modal
-        var buildingScheduleModal = new bootstrap.Modal(document.getElementById('buildingScheduleModal'));
-        buildingScheduleModal.show();
+                    // Hide success message after 3 seconds
+                    setTimeout(function() {
+                        $('#success-message').addClass('d-none');
+                    }, 3000);
+
+                    fetchbuildingSchedules(); // Reload the table after deletion
+                },
+                error: function(xhr) {
+                    alert(xhr.responseJSON.error || 'Terjadi kesalahan');
+                }
+            });
+        }
     });
 
 </script>

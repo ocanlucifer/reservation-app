@@ -168,13 +168,16 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="transaksiDropdown">
                         @if (auth()->user()->role === 'admin' or auth()->user()->role === 'humas' or auth()->user()->role === 'building')
-                            <li><a class="dropdown-item" href="{{ route('buildingSchedules.index') }}"><i class="fas fa-calendar-day"></i> Kelola Jadwal Gedung</a></li>
+                            {{-- <li><a class="dropdown-item" href="{{ route('buildingSchedules.index') }}"><i class="fas fa-calendar-day"></i> Kelola Jadwal Gedung</a></li> --}}
                             <li><a class="dropdown-item" href="{{ route('building-schedules.calendar') }}"><i class="fas fa-calendar-alt"></i> Jadwal Gedung</a></li>
                         @endif
-                        @if (auth()->user()->role === 'admin' or auth()->user()->role === 'humas' or auth()->user()->role === 'visitor')
+                        @if (auth()->user()->role === 'admin' or auth()->user()->role === 'humas')
                             <li><a class="dropdown-item" href="{{ route('visitSchedules.index') }}"><i class="fas fa-calendar-check"></i> Jadwal Kunjungan</a></li>
-                            <li><a class="dropdown-item" href="{{ route('visitReservations.index') }}"><i class="fas fa-bookmark"></i> Reservasi Kunjungan</a></li>
                         @endif
+                        @if (auth()->user()->role === 'admin' or auth()->user()->role === 'humas' or auth()->user()->role === 'visitor')
+                            <li><a class="dropdown-item" href="{{ route('reservation-schedules.calendar') }}"><i class="fas fa-calendar-day"></i> Reservasi Kunjungan</a></li>
+                            <li><a class="dropdown-item" href="{{ route('visitReservations.index') }}"><i class="fas fa-bookmark"></i> Reservasi Kunjungan saya</a></li>
+                            @endif
                         @if (auth()->user()->role === 'admin' or auth()->user()->role === 'koordinator')
                             <li><a class="dropdown-item" href="{{ route('assignTourGuides.index') }}"><i class="fas fa-user-plus"></i> Penunjukan Tour Guide</a></li>
                         @endif

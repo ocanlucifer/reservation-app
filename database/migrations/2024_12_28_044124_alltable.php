@@ -41,7 +41,7 @@ return new class extends Migration
         Schema::create('building_schedules', function (Blueprint $table) {
             $table->id();
             $table->string('transaction_number')->unique();
-            $table->unsignedBigInteger('building_id');
+            $table->unsignedBigInteger('building_id')->nullable();
             $table->date('tanggal');
             $table->time('start_time');
             $table->time('end_time');

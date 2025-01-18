@@ -85,20 +85,50 @@ class BuildingScheduleController extends Controller
         }
 
         // Simpan data
-        BuildingSchedule::create([
+        $buildingSchedule = BuildingSchedule::create([
             'building_id'   => $request->building_id,
             'tanggal'       => $request->tanggal,
             'start_time'    => $request->start_time,
             'end_time'      => $request->end_time,
-            'is_available'  => $request->is_available ?? true,
+            'is_available'  => false, //$request->is_available ?? true,
+            'is_booked'     => true,
+            'booked_date'   => now(),
+            'humas_id'      => Auth::user()->id,
             'create_by'     => Auth::user()->id,
         ]);
+
+        if ($buildingSchedule->is_booked) {
+            VisitReservation::create([
+                'building_schedule_id'  => $buildingSchedule->id,
+                'humas_id'              => Auth::user()->id,
+                'create_by'             => Auth::user()->id,
+                'visitor_id'            => Auth::user()->id,
+                'is_available'          => false,
+                'is_booked'             => true,
+                'booked_date'           => now(),
+                'visitor_id'            => Auth::user()->id,
+                'visitor_company'       => 'Internal',
+                'visitor_address'       => 'Internal',
+                'visitor_purphose'      => $request->visitor_purphose,
+                'visitor_contact'       => '00000000000',
+                'visitor_person'        => $request->visitor_person,
+                'visitor_note'          => '',
+                'tour_guide_requested'  => true,
+                'tour_guide_req_date'   => now(),
+                'tour_guide_assign'     => true,
+                'tour_guide_assign_date'=> now(),
+                'is_confirm'            => true,
+                'confirm_date'          => now(),
+            ]);
+
+        }
 
         return response()->json(['success' => 'Data Jadwal Gedung Berhasil Dibuat!']);
     }
 
     public function update(Request $request, $id)
     {
+        $visit_id = $request->visit_id;
         $buildingSchedule = BuildingSchedule::find($id);
         if (!$buildingSchedule) {
             return response()->json(['error' => 'Jadwal Gedung Tidak Ditemukan!'], 404);
@@ -145,9 +175,20 @@ class BuildingScheduleController extends Controller
             'tanggal'       => $request->tanggal,
             'start_time'    => $request->start_time,
             'end_time'      => $request->end_time,
-            'is_available'  => $request->is_available,
+            'is_available'  => $request->is_available == 1 ? true : false,
+            'is_booked'     => $request->is_available == 1 ? false : true,
+            'booked_date'   => $request->is_available == 1 ? null : now(),
             'update_by'     => Auth::user()->id,
         ]);
+
+        $visitReservation = VisitReservation::find($visit_id);
+        if ($visitReservation){
+            $visitReservation->update([
+                'visitor_purphose'      => $request->visitor_purphose,
+                'visitor_person'        => $request->visitor_person,
+            ]);
+        }
+
 
         return response()->json(['success' => 'Data Jadwal Gedung Berhasil Diubah!']);
     }
@@ -162,14 +203,14 @@ class BuildingScheduleController extends Controller
         }
 
         // Tambahkan validasi: Pastikan jadwal tidak memiliki reservasi aktif
-        if ($buildingSchedule->visitReservation()->exists()) {
-            return response()->json(['error' => 'Jadwal tidak dapat dihapus karena memiliki reservasi aktif!'], 422);
-        }
+        // if ($buildingSchedule->visitReservation()->exists()) {
+        //     return response()->json(['error' => 'Jadwal tidak dapat dihapus karena memiliki reservasi aktif!'], 422);
+        // }
 
         // Hapus data jadwal
         $buildingSchedule->delete();
 
-        return response()->json(['success' => 'Data Jadwal Gedung Berhasil Dihapus!']);
+        return response()->json(['success' => 'Data Jadwal Gedung Berhasil dibatalkan!']);
     }
 
     public function toggleStatus($id)
@@ -205,7 +246,9 @@ class BuildingScheduleController extends Controller
             return response()->json(['error' => 'Jadwal Gedung Tidak Ditemukan!'], 404);
         }
 
-        // Tambahkan validasi: Pastikan jadwal memiliki waktu yang valid untuk diaktifkan
+        // $buildingSchedule->delete();
+
+        // // Tambahkan validasi: Pastikan jadwal memiliki waktu yang valid untuk diaktifkan
         $currentDateTime = now();
         $scheduleEndDateTime = $buildingSchedule->tanggal . ' ' . $buildingSchedule->end_time;
 
@@ -216,43 +259,60 @@ class BuildingScheduleController extends Controller
         // Toggle status
         $buildingSchedule->is_booked    = !$buildingSchedule->is_booked;
         $buildingSchedule->is_available = !$buildingSchedule->is_available;
-        $buildingSchedule->save();
-
-
         $buildingSchedule->humas_id     = $buildingSchedule->is_booked ? Auth::user()->id : null;
         $buildingSchedule->booked_date  = $buildingSchedule->is_booked ? now(): null;
         $buildingSchedule->save();
 
-        if ($buildingSchedule->is_booked) {
-            VisitReservation::create([
-                'building_schedule_id'  => $buildingSchedule->id,
-                'humas_id'              => Auth::user()->id,
-                'create_by'             => Auth::user()->id,
-            ]);
-        }
+        // if ($buildingSchedule->is_booked) {
+        //     VisitReservation::create([
+        //         'building_schedule_id'  => $buildingSchedule->id,
+        //         'humas_id'              => Auth::user()->id,
+        //         'create_by'             => Auth::user()->id,
+        //     ]);
+        // }
 
-        return response()->json(['success' => 'Status Jadwal Gedung Berhasil di Pesan!']);
+        return response()->json(['success' => 'Status Jadwal Gedung Berhasil di batalkan!']);
     }
 
     public function getSchedules(Request $request)
     {
-        $schedules = BuildingSchedule::with('building')
-            ->whereBetween('tanggal', [$request->start_date, $request->end_date])
-            ->get();
+        // $schedules = BuildingSchedule::with('building')
+        //     ->whereBetween('tanggal', [$request->start_date, $request->end_date])
+        //     ->get();
+
+        $fromDate = $request->input('from_date', now()->toDateString());
+        $toDate = $request->input('to_date', now()->addDays(7)->toDateString());
+        $building_id = $request->input('gedung_id');
+
+        // Ambil data jadwal gedung
+        $schedules = VisitReservation::with(['schedule', 'creator', 'updater', 'humas', 'visitor', 'koordinator', 'tourGuide'])
+        ->join('building_schedules as schedule', 'visit_reservations.building_schedule_id', '=', 'schedule.id') // Gabung ke tabel schedule
+        ->whereBetween('schedule.tanggal', [$fromDate, $toDate])
+        ->when($building_id, function ($query, $building_id) {
+            return $query->where('schedule.building_id', $building_id);
+        })
+        ->select('visit_reservations.*')
+        ->get();
 
         $events = $schedules->map(function ($schedule) {
+            $building_name = $schedule->schedule->building_id ? $schedule->schedule->building->name : 'Belum di pilihkan Gedung';
             return [
-                'id' => $schedule->id,
-                'title' => $schedule->building->name,
-                'start' => $schedule->tanggal . 'T' . \Carbon\Carbon::parse($schedule->start_time)->format('H:i'),
-                'end' => $schedule->tanggal . 'T' . \Carbon\Carbon::parse($schedule->end_time)->format('H:i'),
-                'color' => $schedule->is_available ? 'green' : ($schedule->is_booked ? 'red' : 'gray'),
-                'start_time' => \Carbon\Carbon::parse($schedule->start_time)->format('H:i'),
-                'end_time'  => \Carbon\Carbon::parse($schedule->end_time)->format('H:i'),
-                'is_available' => $schedule->is_available,
-                'is_booked' => $schedule->is_booked,
-                'tanggal'   => $schedule->tanggal,
-                'building_id' => $schedule->building_id,
+                'id' => $schedule->schedule->id,
+                'title' => $schedule->visitor_company.' - '.$schedule->visitor_person.' orang ('.$building_name.')' ,
+                'building_name' => $building_name,
+                'start' => $schedule->schedule->tanggal . 'T' . \Carbon\Carbon::parse($schedule->schedule->start_time)->format('H:i'),
+                'end' => $schedule->schedule->tanggal . 'T' . \Carbon\Carbon::parse($schedule->schedule->end_time)->format('H:i'),
+                'color' => $schedule->schedule->is_available ? 'red' : ($schedule->schedule->is_booked ? 'green' : 'gray'),
+                'start_time' => \Carbon\Carbon::parse($schedule->schedule->start_time)->format('H:i'),
+                'end_time'  => \Carbon\Carbon::parse($schedule->schedule->end_time)->format('H:i'),
+                'is_available' => $schedule->schedule->is_available,
+                'is_booked' => $schedule->schedule->is_booked,
+                'tanggal'   => $schedule->schedule->tanggal,
+                'building_id' => $schedule->schedule->building_id,
+                'company'   => $schedule->visitor_company,
+                'kegiatan'   => $schedule->visitor_purphose,
+                'peserta'   => $schedule->visitor_person,
+                'visit_id'  => $schedule->id,
             ];
         });
 
