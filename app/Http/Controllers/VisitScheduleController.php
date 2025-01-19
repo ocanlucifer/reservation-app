@@ -53,6 +53,7 @@ class VisitScheduleController extends Controller
         ->Where('visit_reservations.tour_guide_requested','like', "%{$tg_req}%")
         ->Where('visit_reservations.tour_guide_assign','like', "%{$tg_assign}%")
         ->Where('visit_reservations.is_confirm','like', "%{$is_confirm}%")
+        ->where('visit_reservations.visitor_company','<>', 'Internal')
         ->whereBetween('schedule.tanggal', [$fromDate, $toDate])
         ->orderBy($sortBy, $order)
         ->select('visit_reservations.*')
