@@ -39,7 +39,7 @@ class ReportController extends Controller
 
 
         // Ambil data jadwal gedung
-        $visitSchedules = VisitReservation::with(['schedule', 'creator', 'updater', 'humas', 'visitor', 'koordinator', 'tourGuide'])
+        $visitSchedules = VisitReservation::with(['schedule', 'creator', 'updater', 'humas', 'visitor', 'koordinator'])
         ->join('building_schedules as schedule', 'visit_reservations.building_schedule_id', '=', 'schedule.id') // Gabung ke tabel schedule
         ->when($search, function ($query, $search) {
             $query->whereHas('schedule.building', function ($q) use ($search) {
@@ -55,6 +55,7 @@ class ReportController extends Controller
         ->Where('visit_reservations.tour_guide_assign','like', "%{$tg_assign}%")
         ->Where('visit_reservations.is_confirm','like', "%{$is_confirm}%")
         ->where('schedule.building_id','<>', null)
+        ->where('schedule.is_internal', false)
         ->whereBetween('schedule.tanggal', [$fromDate, $toDate])
         ->orderBy($sortBy, $order)
         ->select('visit_reservations.*')
@@ -84,7 +85,7 @@ class ReportController extends Controller
             $sortBy = 'schedule.tanggal';
         }
 
-        $visitSchedules = VisitReservation::with(['schedule', 'creator', 'updater', 'humas', 'visitor', 'koordinator', 'tourGuide'])
+        $visitSchedules = VisitReservation::with(['schedule', 'creator', 'updater', 'humas', 'visitor', 'koordinator'])
         ->join('building_schedules as schedule', 'visit_reservations.building_schedule_id', '=', 'schedule.id') // Gabung ke tabel schedule
         ->when($search, function ($query, $search) {
             $query->whereHas('schedule.building', function ($q) use ($search) {
@@ -101,6 +102,7 @@ class ReportController extends Controller
         ->Where('visit_reservations.is_confirm','like', "%{$is_confirm}%")
         ->whereBetween('schedule.tanggal', [$fromDate, $toDate])
         ->where('schedule.building_id','<>', null)
+        ->where('schedule.is_internal', false)
         ->orderBy($sortBy, $order)
         ->select('visit_reservations.*')
         ->get();
@@ -126,7 +128,7 @@ class ReportController extends Controller
             $sortBy = 'schedule.tanggal';
         }
 
-        $visitSchedules = VisitReservation::with(['schedule', 'creator', 'updater', 'humas', 'visitor', 'koordinator', 'tourGuide'])
+        $visitSchedules = VisitReservation::with(['schedule', 'creator', 'updater', 'humas', 'visitor', 'koordinator'])
         ->join('building_schedules as schedule', 'visit_reservations.building_schedule_id', '=', 'schedule.id') // Gabung ke tabel schedule
         ->when($search, function ($query, $search) {
             $query->whereHas('schedule.building', function ($q) use ($search) {
@@ -143,6 +145,7 @@ class ReportController extends Controller
         ->Where('visit_reservations.is_confirm','like', "%{$is_confirm}%")
         ->whereBetween('schedule.tanggal', [$fromDate, $toDate])
         ->where('schedule.building_id','<>', null)
+        ->where('schedule.is_internal', false)
         ->orderBy($sortBy, $order)
         ->select('visit_reservations.*')
         ->get();

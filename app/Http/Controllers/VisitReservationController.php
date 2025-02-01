@@ -38,7 +38,7 @@ class VisitReservationController extends Controller
 
 
         // Ambil data jadwal gedung
-        $visitSchedules = VisitReservation::with(['schedule', 'creator', 'updater', 'humas', 'visitor', 'koordinator', 'tourGuide'])
+        $visitSchedules = VisitReservation::with(['schedule', 'creator', 'updater', 'humas', 'visitor', 'koordinator'])
         ->join('building_schedules as schedule', 'visit_reservations.building_schedule_id', '=', 'schedule.id') // Gabung ke tabel schedule
         ->when($search, function ($query, $search) {
             $query->whereHas('schedule.building', function ($q) use ($search) {
@@ -77,7 +77,7 @@ class VisitReservationController extends Controller
         $building_id = $request->input('gedung_id');
 
         // Ambil data jadwal gedung
-        $schedules = VisitReservation::with(['schedule', 'creator', 'updater', 'humas', 'visitor', 'koordinator', 'tourGuide'])
+        $schedules = VisitReservation::with(['schedule', 'creator', 'updater', 'humas', 'visitor', 'koordinator'])
         ->join('building_schedules as schedule', 'visit_reservations.building_schedule_id', '=', 'schedule.id') // Gabung ke tabel schedule
         ->whereBetween('schedule.tanggal', [$fromDate, $toDate])
         ->when($building_id, function ($query, $building_id) {
@@ -118,11 +118,11 @@ class VisitReservationController extends Controller
                 'tanggal'   => $schedule->schedule->tanggal,
                 'building_id' => $schedule->schedule->building_id,
                 'company'   => $schedule->visitor_company,
-                'address'   => $schedule->visitor_address,
+                'visitor_name'   => $schedule->visitor_name,
                 'kegiatan'   => $schedule->visitor_purphose,
                 'contact'    => $schedule->visitor_contact,
                 'peserta'   => $schedule->visitor_person,
-                'note'      => $schedule->visitor_note,
+                'jumlah_kendaraan'      => $schedule->visitor_jumlah_kendaraan,
                 'visit_id'  => $schedule->id,
                 'is_owner'  => $schedule->create_by == Auth::user()->id ? true : false,
             ];
@@ -182,6 +182,7 @@ class VisitReservationController extends Controller
             'end_time'      => $request->end_time,
             'is_available'  => true, //$request->is_available ?? true,
             'is_booked'     => false,
+            'is_internal'   => false,
             // 'booked_date'   => now(),
             // 'humas_id'      => Auth::user()->id,
             'create_by'     => Auth::user()->id,
@@ -189,20 +190,20 @@ class VisitReservationController extends Controller
 
         if ($buildingSchedule) {
             VisitReservation::create([
-                'building_schedule_id'  => $buildingSchedule->id,
-                // 'humas_id'              => Auth::user()->id,
-                'create_by'             => Auth::user()->id,
-                'visitor_id'            => Auth::user()->id,
-                'is_available'          => false,
-                'is_booked'             => true,
-                'booked_date'           => now(),
-                'visitor_id'            => Auth::user()->id,
-                'visitor_company'       => $request->visitor_company,
-                'visitor_address'       => $request->visitor_address,
-                'visitor_purphose'      => $request->visitor_purphose,
-                'visitor_contact'       => $request->visitor_contact,
-                'visitor_person'        => $request->visitor_person,
-                'visitor_note'          => $request->visitor_note,
+                'building_schedule_id'      => $buildingSchedule->id,
+                // 'humas_id'                  => Auth::user()->id,
+                'create_by'                 => Auth::user()->id,
+                'visitor_id'                => Auth::user()->id,
+                'is_available'              => false,
+                'is_booked'                 => true,
+                'booked_date'               => now(),
+                'visitor_id'                => Auth::user()->id,
+                'visitor_company'           => $request->visitor_company,
+                'visitor_name'              => $request->visitor_name,
+                'visitor_purphose'          => $request->visitor_purphose,
+                'visitor_contact'           => $request->visitor_contact,
+                'visitor_person'            => $request->visitor_person,
+                'visitor_jumlah_kendaraan'  => $request->visitor_jumlah_kendaraan,
                 // 'tour_guide_requested'  => true,
                 // 'tour_guide_req_date'   => now(),
                 // 'tour_guide_assign'     => true,
@@ -270,12 +271,12 @@ class VisitReservationController extends Controller
         $visitReservation = VisitReservation::find($visit_id);
         if ($visitReservation){
             $visitReservation->update([
-                'visitor_company'       => $request->visitor_company,
-                'visitor_address'       => $request->visitor_address,
-                'visitor_purphose'      => $request->visitor_purphose,
-                'visitor_contact'       => $request->visitor_contact,
-                'visitor_person'        => $request->visitor_person,
-                'visitor_note'          => $request->visitor_note,
+                'visitor_company'           => $request->visitor_company,
+                'visitor_name'              => $request->visitor_name,
+                'visitor_purphose'          => $request->visitor_purphose,
+                'visitor_contact'           => $request->visitor_contact,
+                'visitor_person'            => $request->visitor_person,
+                'visitor_jumlah_kendaraan'  => $request->visitor_jumlah_kendaraan,
             ]);
         }
 

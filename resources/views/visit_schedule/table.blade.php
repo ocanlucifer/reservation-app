@@ -42,11 +42,11 @@
                     <button class="btn {{ $visitSchedule->is_booked ? 'btn-warning' : 'btn-primary' }} btn-sm booking_form"
                             data-id="{{ $visitSchedule->id }}"
                             data-company="{{ $visitSchedule->visitor_company }}"
-                            data-address="{{ $visitSchedule->visitor_address }}"
+                            data-visitor_name="{{ $visitSchedule->visitor_name }}"
                             data-purphose="{{ $visitSchedule->visitor_purphose }}"
                             data-contact="{{ $visitSchedule->visitor_contact }}"
                             data-person="{{ $visitSchedule->visitor_person }}"
-                            data-note="{{ $visitSchedule->visitor_note }}"
+                            data-jumlah_kendaraan="{{ $visitSchedule->visitor_jumlah_kendaraan }}"
                             data-bs-toggle="tooltip" title="{{ $visitSchedule->is_booked ? 'Ubah Reservasi' : 'Buat Reservasi' }}"
                             {{-- {{ $visitSchedule->is_booked ? 'hidden' : '' }} --}}
                             {{ $visitSchedule->tour_guide_assign ? 'hidden' : '' }}
@@ -104,8 +104,12 @@
                         </p>
                         <p class="card-text mb-1">
                             @if ($visitSchedule->tour_guide_assign)
-                                <span class="badge bg-success">
-                                    Tour Guide: {{ $visitSchedule->tour_guide_id ? $visitSchedule->tourGuide->name : '' }} ditugaskan oleh: {{ $visitSchedule->koordinator_id ? $visitSchedule->koordinator->name : '' }} ({{ $visitSchedule->tour_guide_assign_date }})
+                                <span class="badge bg-success d-block text-start">
+                                    Tour Guide: {{ $visitSchedule->tourguide_name }}
+                                    <br> NIM: {{ $visitSchedule->tourguide_nim }}
+                                    <br> Semester: {{ $visitSchedule->tourguide_semester }}
+                                    <br> Kontak: {{ $visitSchedule->tourguide_contact }}
+                                    <br> ditugaskan oleh: {{ $visitSchedule->koordinator_id ? $visitSchedule->koordinator->name : '' }} ({{ $visitSchedule->tour_guide_assign_date }})
                                 </span>
                             @else
                                 <span class="badge bg-danger">Belum Mendapatkan Tour Guide</span>
@@ -123,23 +127,23 @@
                     </div>
                     <div class="col-md-6">
                         <div class="row">
-                            <div class="col-3"><strong>Pengunjung</strong></div>
+                            <div class="col-3"><strong>Instansi Pengunjung</strong></div>
                             <div class="col-8">: {{ $visitSchedule->visitor_company }}</div>
+
+                            <div class="col-3"><strong>Nama Pengunjung</strong></div>
+                            <div class="col-8">: {{ $visitSchedule->visitor_name }}</div>
 
                             <div class="col-3"><strong>Jumlah orang</strong></div>
                             <div class="col-8">: {{ $visitSchedule->visitor_person }}</div>
 
+                            <div class="col-3"><strong>Jumlah Kendaraan</strong></div>
+                            <div class="col-8">: {{ $visitSchedule->visitor_jumlah_kendaraan }}</div>
+
                             <div class="col-3"><strong>Tujuan</strong></div>
                             <div class="col-8">: {{ $visitSchedule->visitor_purphose }}</div>
 
-                            <div class="col-3"><strong>Alamat</strong></div>
-                            <div class="col-8">: {{ $visitSchedule->visitor_address }}</div>
-
                             <div class="col-3"><strong>Kontak</strong></div>
                             <div class="col-8">: {{ $visitSchedule->visitor_contact }}</div>
-
-                            <div class="col-3"><strong>Catatan</strong></div>
-                            <div class="col-8">: {{ $visitSchedule->visitor_note }}</div>
                         </div>
                     </div>
                 </div>

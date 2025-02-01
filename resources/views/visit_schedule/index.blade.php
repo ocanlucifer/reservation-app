@@ -139,8 +139,8 @@
                             <input type="text" id="buildingSchedule-company" name ="visitor_company" class="form-control" required>
                         </div>
                         <div class="mb-3">
-                            <label for="visitor_adress" class="form-label">Alamat Pengunjung</label>
-                            <input type="text" id="buildingSchedule-address" name ="visitor_address" class="form-control" required>
+                            <label for="visitor_name" class="form-label">Name Pengunjung</label>
+                            <input type="text" id="buildingSchedule-visitor_name" name ="visitor_name" class="form-control" required>
                         </div>
                         <div class="mb-3">
                             <label for="visitor_purphose" class="form-label">Tujuan Kunjungan</label>
@@ -155,8 +155,8 @@
                             <input type="number" id="buildingSchedule-person" name ="visitor_person" class="form-control" required>
                         </div>
                         <div class="mb-3">
-                            <label for="visitor_note" class="form-label">Catatan</label>
-                            <input type="text" id="buildingSchedule-note" name ="visitor_note" class="form-control" required>
+                            <label for="visitor_jumlah_kendaraan" class="form-label">Catatan</label>
+                            <input type="text" id="buildingSchedule-jumlah_kendaraan" name ="visitor_jumlah_kendaraan" class="form-control" required>
                         </div>
                     </form>
                 </div>
@@ -235,20 +235,20 @@
         $(document).on('click', '.booking_form', function() {
             const buildingScheduleId = $(this).data('id');
             const company = $(this).data('company');
-            const address = $(this).data('address');
+            const visitor_name = $(this).data('visitor_name');
             const purphose = $(this).data('purphose');
             const contact = $(this).data('contact');
             const person = $(this).data('person');
-            const note = $(this).data('note');
+            const jumlah_kendaraan = $(this).data('jumlah_kendaraan');
 
             $('#buildingScheduleModalLabel').text('Form Reservasi Kunjungan');
             $('#buildingSchedule-id').val(buildingScheduleId);
             $('#buildingSchedule-company').val(company);
-            $('#buildingSchedule-address').val(address);
+            $('#buildingSchedule-visitor_name').val(visitor_name);
             $('#buildingSchedule-purphose').val(purphose);
             $('#buildingSchedule-contact').val(contact);
             $('#buildingSchedule-person').val(person);
-            $('#buildingSchedule-note').val(note);
+            $('#buildingSchedule-jumlah_kendaraan').val(jumlah_kendaraan);
 
             $('#buildingScheduleModal').modal('show');
         });

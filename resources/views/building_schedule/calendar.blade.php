@@ -54,6 +54,10 @@
                             </select>
                         </div>
                         <div class="mb-3">
+                            <label for="visitor_name" class="form-label">Nama Pengunjung</label>
+                            <input type="text" id="buildingSchedule-visitor_name" name ="visitor_name" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
                             <label for="tanggal" class="form-label">Tanggal</label>
                             <input type="date" id="buildingSchedule-tanggal" name="tanggal" class="form-control" required>
                         </div>
@@ -72,6 +76,10 @@
                         <div class="mb-3">
                             <label for="visitor_person" class="form-label">Jumlah Peserta</label>
                             <input type="number" id="buildingSchedule-person" name ="visitor_person" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="visitor_jumlah_kendaraan" class="form-label">Jumlah Kendaraan</label>
+                            <input type="number" id="buildingSchedule-jumlah_kendaraan" name ="visitor_jumlah_kendaraan" class="form-control" required>
                         </div>
                     </form>
                 </div>
@@ -259,6 +267,8 @@
                             data-end_time="${schedule.end_time }"
                             data-purphose="${schedule.kegiatan }"
                             data-person="${schedule.peserta }"
+                            data-visitor_name="${schedule.visitor_name }"
+                            data-jumlah_kendaraan="${schedule.jumlah_kendaraan }"
                             data-visit_id="${schedule.visit_id }"
                             data-status="${schedule.is_available }"
                             data-is_booked="${schedule.is_booked }"
@@ -274,6 +284,8 @@
                             data-end_time="${schedule.end_time }"
                             data-purphose="${schedule.kegiatan }"
                             data-person="${schedule.peserta }"
+                            data-visitor_name="${schedule.visitor_name }"
+                            data-jumlah_kendaraan="${schedule.jumlah_kendaraan }"
                             data-visit_id="${schedule.visit_id }"
                             data-status="${schedule.is_available }"
                             data-bs-toggle="tooltip" title="Ubah">
@@ -343,6 +355,8 @@
         const buildingScheduleStatus = $(this).data('status');
         const kegiatan = $(this).data('purphose');
         const peserta = $(this).data('person');
+        const visitor_name = $(this).data('visitor_name');
+        const jumlah_kendaraan = $(this).data('jumlah_kendaraan');
         const visit_id = $(this).data('visit_id');
 
         $('#buildingScheduleModalLabel').text('Ubah Jadwal Gedung');
@@ -354,6 +368,8 @@
         $('#buildingSchedule-status').val(buildingScheduleStatus);
         $('#buildingSchedule-purphose').val(kegiatan);
         $('#buildingSchedule-person').val(peserta);
+        $('#buildingSchedule-visitor_name').val(visitor_name);
+        $('#buildingSchedule-jumlah_kendaraan').val(jumlah_kendaraan);
         $('#buildingSchedule-visit_id').val(visit_id);
 
         // Close the calendar actions modal
@@ -476,6 +492,8 @@
         const peserta = $(this).data('person');
         const visit_id = $(this).data('visit_id');
         const is_booked = $(this).data('is_booked');
+        const visitor_name = $(this).data('visitor_name');
+        const jumlah_kendaraan = $(this).data('jumlah_kendaraan');
 
         $('#buildingScheduleModalLabel').text(is_booked ? 'Batalkan Reservasi' : 'Booking Jadwal Gedung');
         $('#buildingSchedule-id').val(buildingScheduleId);
@@ -487,6 +505,8 @@
         $('#buildingSchedule-purphose').val(kegiatan);
         $('#buildingSchedule-person').val(peserta);
         $('#buildingSchedule-visit_id').val(visit_id);
+        $('#buildingSchedule-visitor_name').val(visitor_name);
+        $('#buildingSchedule-jumlah_kendaraan').val(jumlah_kendaraan);
 
         // Close the calendar actions modal
         $('#calendarActionsModal').modal('hide');

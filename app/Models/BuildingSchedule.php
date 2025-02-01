@@ -17,6 +17,7 @@ class BuildingSchedule extends Model
         'end_time',
         'is_available',
         'is_booked',
+        'is_internal',
         'booked_date',
         'humas_id',
         'create_by',
@@ -63,7 +64,7 @@ class BuildingSchedule extends Model
 
     public function visitReservation()
     {
-        return $this->hasMany(visitReservation::class, 'building_schedule_id');
+        return $this->hasOne(visitReservation::class, 'building_schedule_id');
     }
 }
 

@@ -33,7 +33,7 @@ class ReportBuildingController extends Controller
 
 
         // Ambil data jadwal gedung
-        $buildingSchedules = BuildingSchedule::with(['building', 'creator', 'updater', 'humas'])
+        $buildingSchedules = BuildingSchedule::with(['building', 'creator', 'updater', 'humas', 'visitReservation'])
         ->when($search, function ($query, $search) {
             $query->whereHas('building', function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%"); // Filter berdasarkan nama gedung
@@ -65,7 +65,7 @@ class ReportBuildingController extends Controller
         $is_available = $request->input('is_available', '');
         $is_booked = $request->input('is_booked', '');
 
-        $buildingSchedules = BuildingSchedule::with(['building', 'creator', 'updater', 'humas'])
+        $buildingSchedules = BuildingSchedule::with(['building', 'creator', 'updater', 'humas', 'visitReservation'])
         ->when($search, function ($query, $search) {
             $query->whereHas('building', function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%"); // Filter berdasarkan nama gedung
@@ -92,7 +92,7 @@ class ReportBuildingController extends Controller
         $is_available = $request->input('is_available', '');
         $is_booked = $request->input('is_booked', '');
 
-        $buildingSchedules = BuildingSchedule::with(['building', 'creator', 'updater', 'humas'])
+        $buildingSchedules = BuildingSchedule::with(['building', 'creator', 'updater', 'humas', 'visitReservation'])
         ->when($search, function ($query, $search) {
             $query->whereHas('building', function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%"); // Filter berdasarkan nama gedung

@@ -155,7 +155,7 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="masterDropdown">
                             <li><a class="dropdown-item" href="{{ route('buildings.index') }}"><i class="fas fa-building"></i> Gedung</a></li>
-                            <li><a class="dropdown-item" href="{{ route('tourGuides.index') }}"><i class="fas fa-user-tie"></i> Tour Guide</a></li>
+                            {{-- <li><a class="dropdown-item" href="{{ route('tourGuides.index') }}"><i class="fas fa-user-tie"></i> Tour Guide</a></li> --}}
                             <li><a class="dropdown-item" href="{{ route('users.index') }}"><i class="fas fa-users-cog"></i> Pengguna</a></li>
                         </ul>
                     </li>

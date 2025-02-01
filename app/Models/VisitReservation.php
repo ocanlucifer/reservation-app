@@ -13,11 +13,11 @@ class VisitReservation extends Model
         'transaction_number',
         'building_schedule_id',
         'visitor_company',
-        'visitor_address',
+        'visitor_name',
         'visitor_purphose',
         'visitor_contact',
         'visitor_person',
-        'visitor_note',
+        'visitor_jumlah_kendaraan',
         'is_available',
         'is_booked',
         'tour_guide_requested',
@@ -30,7 +30,11 @@ class VisitReservation extends Model
         'humas_id',
         'visitor_id',
         'koordinator_id',
-        'tour_guide_id',
+        // 'tour_guide_id',
+        'tourguide_name',
+        'tourguide_nim',
+        'tourguide_semester',
+        'tourguide_contact',
         'create_by',
         'update_by',
     ];
@@ -73,10 +77,10 @@ class VisitReservation extends Model
         return $this->belongsTo(User::class, 'koordinator_id');
     }
 
-    public function tourGuide()
-    {
-        return $this->belongsTo(TourGuide::class, 'tour_guide_id');
-    }
+    // public function tourGuide()
+    // {
+    //     return $this->belongsTo(TourGuide::class, 'tour_guide_id');
+    // }
 
     public function creator()
     {
