@@ -54,6 +54,7 @@ class ReportController extends Controller
         ->Where('visit_reservations.tour_guide_requested','like', "%{$tg_req}%")
         ->Where('visit_reservations.tour_guide_assign','like', "%{$tg_assign}%")
         ->Where('visit_reservations.is_confirm','like', "%{$is_confirm}%")
+        ->where('schedule.building_id','<>', null)
         ->whereBetween('schedule.tanggal', [$fromDate, $toDate])
         ->orderBy($sortBy, $order)
         ->select('visit_reservations.*')
@@ -99,6 +100,7 @@ class ReportController extends Controller
         ->Where('visit_reservations.tour_guide_assign','like', "%{$tg_assign}%")
         ->Where('visit_reservations.is_confirm','like', "%{$is_confirm}%")
         ->whereBetween('schedule.tanggal', [$fromDate, $toDate])
+        ->where('schedule.building_id','<>', null)
         ->orderBy($sortBy, $order)
         ->select('visit_reservations.*')
         ->get();
@@ -140,6 +142,7 @@ class ReportController extends Controller
         ->Where('visit_reservations.tour_guide_assign','like', "%{$tg_assign}%")
         ->Where('visit_reservations.is_confirm','like', "%{$is_confirm}%")
         ->whereBetween('schedule.tanggal', [$fromDate, $toDate])
+        ->where('schedule.building_id','<>', null)
         ->orderBy($sortBy, $order)
         ->select('visit_reservations.*')
         ->get();
