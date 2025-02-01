@@ -92,6 +92,7 @@ class BuildingScheduleController extends Controller
             'end_time'      => $request->end_time,
             'is_available'  => false, //$request->is_available ?? true,
             'is_booked'     => true,
+            'is_internal'   => true,
             'booked_date'   => now(),
             'humas_id'      => Auth::user()->id,
             'create_by'     => Auth::user()->id,
@@ -99,26 +100,26 @@ class BuildingScheduleController extends Controller
 
         if ($buildingSchedule->is_booked) {
             VisitReservation::create([
-                'building_schedule_id'  => $buildingSchedule->id,
-                'humas_id'              => Auth::user()->id,
-                'create_by'             => Auth::user()->id,
-                'visitor_id'            => Auth::user()->id,
-                'is_available'          => false,
-                'is_booked'             => true,
-                'booked_date'           => now(),
-                'visitor_id'            => Auth::user()->id,
-                'visitor_company'       => 'Internal',
-                'visitor_address'       => 'Internal',
-                'visitor_purphose'      => $request->visitor_purphose,
-                'visitor_contact'       => '00000000000',
-                'visitor_person'        => $request->visitor_person,
-                'visitor_note'          => '',
-                'tour_guide_requested'  => true,
-                'tour_guide_req_date'   => now(),
-                'tour_guide_assign'     => true,
-                'tour_guide_assign_date'=> now(),
-                'is_confirm'            => true,
-                'confirm_date'          => now(),
+                'building_schedule_id'      => $buildingSchedule->id,
+                'humas_id'                  => Auth::user()->id,
+                'create_by'                 => Auth::user()->id,
+                'visitor_id'                => Auth::user()->id,
+                'is_available'              => false,
+                'is_booked'                 => true,
+                'booked_date'               => now(),
+                'visitor_id'                => Auth::user()->id,
+                'visitor_company'           => 'Internal',
+                'visitor_name'              => $request->visitor_name,
+                'visitor_purphose'          => $request->visitor_purphose,
+                'visitor_contact'           => '00000000000',
+                'visitor_person'            => $request->visitor_person,
+                'visitor_jumlah_kendaraan'  => $request->visitor_jumlah_kendaraan,
+                'tour_guide_requested'      => true,
+                'tour_guide_req_date'       => now(),
+                'tour_guide_assign'         => true,
+                'tour_guide_assign_date'    => now(),
+                'is_confirm'                => true,
+                'confirm_date'              => now(),
             ]);
 
         }
@@ -184,8 +185,10 @@ class BuildingScheduleController extends Controller
         $visitReservation = VisitReservation::find($visit_id);
         if ($visitReservation){
             $visitReservation->update([
-                'visitor_purphose'      => $request->visitor_purphose,
-                'visitor_person'        => $request->visitor_person,
+                'visitor_name'              => $request->visitor_name,
+                'visitor_purphose'          => $request->visitor_purphose,
+                'visitor_person'            => $request->visitor_person,
+                'visitor_jumlah_kendaraan'  => $request->visitor_jumlah_kendaraan,
             ]);
         }
 
@@ -286,7 +289,7 @@ class BuildingScheduleController extends Controller
         $building_id = $request->input('gedung_id');
 
         // Ambil data jadwal gedung
-        $schedules = VisitReservation::with(['schedule', 'creator', 'updater', 'humas', 'visitor', 'koordinator', 'tourGuide'])
+        $schedules = VisitReservation::with(['schedule', 'creator', 'updater', 'humas', 'visitor', 'koordinator'])
         ->join('building_schedules as schedule', 'visit_reservations.building_schedule_id', '=', 'schedule.id') // Gabung ke tabel schedule
         ->whereBetween('schedule.tanggal', [$fromDate, $toDate])
         ->when($building_id, function ($query, $building_id) {
@@ -313,6 +316,8 @@ class BuildingScheduleController extends Controller
                 'company'   => $schedule->visitor_company,
                 'kegiatan'   => $schedule->visitor_purphose,
                 'peserta'   => $schedule->visitor_person,
+                'visitor_name'   => $schedule->visitor_name,
+                'jumlah_kendaraan'   => $schedule->visitor_jumlah_kendaraan,
                 'visit_id'  => $schedule->id,
             ];
         });

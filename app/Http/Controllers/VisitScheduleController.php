@@ -38,7 +38,7 @@ class VisitScheduleController extends Controller
 
 
         // Ambil data jadwal gedung
-        $visitSchedules = VisitReservation::with(['schedule', 'creator', 'updater', 'humas', 'visitor', 'koordinator', 'tourGuide'])
+        $visitSchedules = VisitReservation::with(['schedule', 'creator', 'updater', 'humas', 'visitor', 'koordinator'])
         ->join('building_schedules as schedule', 'visit_reservations.building_schedule_id', '=', 'schedule.id') // Gabung ke tabel schedule
         ->when($search, function ($query, $search) {
             $query->whereHas('schedule.building', function ($q) use ($search) {
@@ -53,7 +53,7 @@ class VisitScheduleController extends Controller
         ->Where('visit_reservations.tour_guide_requested','like', "%{$tg_req}%")
         ->Where('visit_reservations.tour_guide_assign','like', "%{$tg_assign}%")
         ->Where('visit_reservations.is_confirm','like', "%{$is_confirm}%")
-        ->where('visit_reservations.visitor_company','<>', 'Internal')
+        ->where('schedule.is_internal', false)
         ->whereBetween('schedule.tanggal', [$fromDate, $toDate])
         ->orderBy($sortBy, $order)
         ->select('visit_reservations.*')
@@ -135,16 +135,16 @@ class VisitScheduleController extends Controller
             return response()->json(['error' => 'Tidak dapat memesan jadwal yang telah berakhir!'], 422);
         }
 
-        $visitSchedule->is_booked           = true;
-        $visitSchedule->is_available        = false;
-        $visitSchedule->visitor_id          = Auth::user()->id;
-        $visitSchedule->booked_date         = now();
-        $visitSchedule->visitor_company     = $request->visitor_company;
-        $visitSchedule->visitor_address     = $request->visitor_address;
-        $visitSchedule->visitor_purphose    = $request->visitor_purphose;
-        $visitSchedule->visitor_contact     = $request->visitor_contact;
-        $visitSchedule->visitor_person      = $request->visitor_person;
-        $visitSchedule->visitor_note        = $request->visitor_note;
+        $visitSchedule->is_booked                   = true;
+        $visitSchedule->is_available                = false;
+        $visitSchedule->visitor_id                  = Auth::user()->id;
+        $visitSchedule->booked_date                 = now();
+        $visitSchedule->visitor_company             = $request->visitor_company;
+        $visitSchedule->visitor_name                = $request->visitor_name;
+        $visitSchedule->visitor_purphose            = $request->visitor_purphose;
+        $visitSchedule->visitor_contact             = $request->visitor_contact;
+        $visitSchedule->visitor_person              = $request->visitor_person;
+        $visitSchedule->visitor_jumlah_kendaraan    = $request->visitor_jumlah_kendaraan;
         $visitSchedule->save();
 
         return response()->json(['success' => 'Reservasi Berhasi!']);
@@ -167,16 +167,16 @@ class VisitScheduleController extends Controller
             return response()->json(['error' => 'Tidak dapat memesan jadwal yang telah berakhir!'], 422);
         }
 
-        $visitSchedule->is_booked           = false;
-        $visitSchedule->is_available        = true;
-        $visitSchedule->booked_date         = null;
-        $visitSchedule->visitor_id          = null;
-        $visitSchedule->visitor_company     = null;
-        $visitSchedule->visitor_address     = null;
-        $visitSchedule->visitor_purphose    = null;
-        $visitSchedule->visitor_contact     = null;
-        $visitSchedule->visitor_person      = null;
-        $visitSchedule->visitor_note        = null;
+        $visitSchedule->is_booked                   = false;
+        $visitSchedule->is_available                = true;
+        $visitSchedule->booked_date                 = null;
+        $visitSchedule->visitor_id                  = null;
+        $visitSchedule->visitor_company             = null;
+        $visitSchedule->visitor_name                = null;
+        $visitSchedule->visitor_purphose            = null;
+        $visitSchedule->visitor_contact             = null;
+        $visitSchedule->visitor_person              = null;
+        $visitSchedule->visitor_jumlah_kendaraan    = null;
         $visitSchedule->save();
 
         return response()->json(['success' => 'Pembatalan Reservasi Berhasil!']);

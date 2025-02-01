@@ -60,8 +60,8 @@
                             <input type="text" id="buildingSchedule-company" name ="visitor_company" class="form-control" required>
                         </div>
                         <div class="mb-3">
-                            <label for="visitor_adress" class="form-label">Alamat Pengunjung</label>
-                            <input type="text" id="buildingSchedule-address" name ="visitor_address" class="form-control" required>
+                            <label for="visitor_name" class="form-label">Nama Pengunjung</label>
+                            <input type="text" id="buildingSchedule-visitor_name" name ="visitor_name" class="form-control" required>
                         </div>
                         <div class="mb-3">
                             <label for="visitor_purphose" class="form-label">Tujuan Kunjungan</label>
@@ -76,8 +76,8 @@
                             <input type="number" id="buildingSchedule-person" name ="visitor_person" class="form-control" required>
                         </div>
                         <div class="mb-3">
-                            <label for="visitor_note" class="form-label">Catatan</label>
-                            <input type="text" id="buildingSchedule-note" name ="visitor_note" class="form-control" required>
+                            <label for="visitor_jumlah_kendaraan" class="form-label">Jumlah Kendaraan</label>
+                            <input type="text" id="buildingSchedule-jumlah_kendaraan" name ="visitor_jumlah_kendaraan" class="form-control" required>
                         </div>
                     </form>
                 </div>
@@ -273,9 +273,9 @@
                             data-person="${schedule.peserta }"
                             data-visit_id="${schedule.visit_id }"
                             data-company="${schedule.company }"
-                            data-address="${schedule.address }"
+                            data-visitor_name="${schedule.visitor_name }"
                             data-contact="${schedule.contact }"
-                            data-note="${schedule.note }"
+                            data-jumlah_kendaraan="${schedule.jumlah_kendaraan }"
                             data-bs-toggle="tooltip" title="Ubah"
                             ${!schedule.is_owner  ? 'hidden' : '' }>
                             <i class="bi bi-pencil-square"></i>
@@ -347,9 +347,9 @@
         const peserta = $(this).data('person');
         const visit_id = $(this).data('visit_id');
         const company = $(this).data('company');
-        const address = $(this).data('address');
+        const visitor_name = $(this).data('visitor_name');
         const contact = $(this).data('contact');
-        const note = $(this).data('note');
+        const jumlah_kendaraan = $(this).data('jumlah_kendaraan');
 
         $('#buildingScheduleModalLabel').text('Ubah Jadwal Gedung');
         $('#buildingSchedule-id').val(buildingScheduleId);
@@ -362,9 +362,9 @@
         $('#buildingSchedule-person').val(peserta);
         $('#buildingSchedule-visit_id').val(visit_id);
         $('#buildingSchedule-company').val(company);
-        $('#buildingSchedule-address').val(address);
+        $('#buildingSchedule-visitor_name').val(visitor_name);
         $('#buildingSchedule-contact').val(contact);
-        $('#buildingSchedule-note').val(note);
+        $('#buildingSchedule-jumlah_kendaraan').val(jumlah_kendaraan);
 
         // Close the calendar actions modal
         $('#calendarActionsModal').modal('hide');

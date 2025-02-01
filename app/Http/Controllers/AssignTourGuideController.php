@@ -36,7 +36,7 @@ class AssignTourGuideController extends Controller
 
 
         // Ambil data jadwal gedung
-        $visitSchedules = VisitReservation::with(['schedule', 'creator', 'updater', 'humas', 'visitor', 'koordinator', 'tourGuide'])
+        $visitSchedules = VisitReservation::with(['schedule', 'creator', 'updater', 'humas', 'visitor', 'koordinator'])
         ->join('building_schedules as schedule', 'visit_reservations.building_schedule_id', '=', 'schedule.id') // Gabung ke tabel schedule
         ->when($search, function ($query, $search) {
             $query->whereHas('schedule.building', function ($q) use ($search) {
@@ -55,13 +55,13 @@ class AssignTourGuideController extends Controller
         ->select('visit_reservations.*')
         ->paginate($perPage);
 
-        $tourguides = TourGuide::isActive()->get();
+        // $tourguides = TourGuide::isActive()->get();
 
         if ($request->ajax()) {
-            return view('tour_guide_assign.table', compact('visitSchedules', 'tourguides', 'search', 'sortBy', 'order', 'perPage', 'fromDate', 'toDate'));
+            return view('tour_guide_assign.table', compact('visitSchedules', 'search', 'sortBy', 'order', 'perPage', 'fromDate', 'toDate'));
         }
 
-        return view('tour_guide_assign.index', compact('visitSchedules', 'tourguides', 'search', 'sortBy', 'order', 'perPage', 'fromDate', 'toDate'));
+        return view('tour_guide_assign.index', compact('visitSchedules', 'search', 'sortBy', 'order', 'perPage', 'fromDate', 'toDate'));
     }
 
     public function update(Request $request, $id)
@@ -73,10 +73,12 @@ class AssignTourGuideController extends Controller
 
         // Update data
         $visitSchedule->update([
-            'tour_guide_id'             => $request->tour_guide_id,
+            'tourguide_name'            => $request->tourguide_name,
+            'tourguide_nim'             => $request->tourguide_nim,
+            'tourguide_semester'        => $request->tourguide_semester,
+            'tourguide_contact'         => $request->tourguide_contact,
             'tour_guide_assign'         => true,
             'tour_guide_assign_date'    => now(),
-            'end_time'                  => $request->end_time,
             'koordinator_id'            => Auth::user()->id,
         ]);
 
@@ -99,6 +101,10 @@ class AssignTourGuideController extends Controller
 
         // batalkan tour guide
         $visitSchedule->tour_guide_assign       = false;
+        $visitSchedule->tourguide_name          = null;
+        $visitSchedule->tourguide_nim           = null;
+        $visitSchedule->tourguide_semester      = null;
+        $visitSchedule->tourguide_contact       = null;
         $visitSchedule->tour_guide_assign_date  = null;
         $visitSchedule->koordinator_id          = null;
         $visitSchedule->save();

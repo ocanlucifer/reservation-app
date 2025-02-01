@@ -47,6 +47,7 @@ return new class extends Migration
             $table->time('end_time');
             $table->boolean('is_available')->default(true); // flag available
             $table->boolean('is_booked')->default(false); // flag booked
+            $table->boolean('is_internal')->default(false); // flag booked
             $table->date('booked_date')->nullable();
             $table->unsignedBigInteger('humas_id')->nullable();
             $table->unsignedBigInteger('create_by');
@@ -65,11 +66,12 @@ return new class extends Migration
             $table->string('transaction_number')->unique();
             $table->unsignedBigInteger('building_schedule_id');
             $table->string('visitor_company')->nullable();
-            $table->text('visitor_address')->nullable();
+            // $table->text('visitor_address')->nullable();
+            $table->text('visitor_name')->nullable();
             $table->string('visitor_purphose')->nullable();
             $table->string('visitor_contact')->nullable();
             $table->string('visitor_person')->nullable();
-            $table->text('visitor_note')->nullable();
+            $table->string('visitor_jumlah_kendaraan')->nullable();
             $table->boolean('is_available')->default(true); // flag available
             $table->boolean('is_booked')->default(false); // flag booked
             $table->boolean('tour_guide_requested')->default(false); // flag booked
@@ -82,7 +84,11 @@ return new class extends Migration
             $table->unsignedBigInteger('humas_id')->nullable();
             $table->unsignedBigInteger('visitor_id')->nullable();
             $table->unsignedBigInteger('koordinator_id')->nullable();
-            $table->unsignedBigInteger('tour_guide_id')->nullable();
+            // $table->unsignedBigInteger('tour_guide_id')->nullable();
+            $table->string('tourguide_name')->nullable();
+            $table->string('tourguide_nim')->nullable();
+            $table->string('tourguide_semester')->nullable();
+            $table->string('tourguide_contact')->nullable();
             $table->unsignedBigInteger('create_by');
             $table->unsignedBigInteger('update_by')->nullable();
             $table->timestamps();
@@ -91,7 +97,7 @@ return new class extends Migration
             $table->foreign('humas_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('visitor_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('koordinator_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('tour_guide_id')->references('id')->on('tour_guides')->onDelete('cascade');
+            // $table->foreign('tour_guide_id')->references('id')->on('tour_guides')->onDelete('cascade');
             $table->foreign('create_by')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('update_by')->references('id')->on('users')->onDelete('cascade');
         });

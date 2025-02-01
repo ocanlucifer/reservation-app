@@ -121,7 +121,7 @@
                     <form id="TourGuideAssign-form">
                         @csrf
                         <input type="hidden" name="id" id="TourGuideAssign-id">
-                        <div class="mb-3">
+                        {{-- <div class="mb-3">
                             <label for="TourGuideAssign-tour_guide_id" class="form-label">Nama Tour Guide</label>
                             <select id="TourGuideAssign-tour_guide_id" name="tour_guide_id" class="form-select" required>
                                 <option selected>Pilih Tour Guide</option>
@@ -129,6 +129,22 @@
                                     <option value="{{ $tourguide->id }}">{{ $tourguide->name }}</option>
                                 @endforeach
                             </select>
+                        </div> --}}
+                        <div class="mb-3">
+                            <label for="tourguide_name" class="form-label">Nama Tour Guide</label>
+                            <input type="text" id="TourGuideAssign-name" name ="tourguide_name" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tourguide_nim" class="form-label">NIM</label>
+                            <input type="text" id="TourGuideAssign-nim" name ="tourguide_nim" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tourguide_semester" class="form-label">Semester Mahasiswa</label>
+                            <input type="text" id="TourGuideAssign-semester" name ="tourguide_semester" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tourguide_contact" class="form-label">Kontak</label>
+                            <input type="text" id="TourGuideAssign-contact" name ="tourguide_contact" class="form-control" required>
                         </div>
                     </form>
                 </div>
@@ -206,7 +222,7 @@
         // Open the Create user form
         $(document).on('click', '.add-TourGuideAssign', function() {
             const TourGuideAssignId = $(this).data('id');
-            $('#TourGuideAssignModalLabel').text('Pilih Tour Guide');
+            $('#TourGuideAssignModalLabel').text('Input Tour Guide');
             $('#TourGuideAssign-form')[0].reset(); // Clear form
             $('#TourGuideAssign-id').val(TourGuideAssignId); // Clear hidden id field
             $('#TourGuideAssignModal').modal('show');
@@ -215,12 +231,18 @@
         // Open the Edit user form
         $(document).on('click', '.edit-TourGuideAssign', function() {
             const TourGuideAssignId = $(this).data('id');
-            const tour_guide_id = $(this).data('tourguideid');
+            const name = $(this).data('name');
+            const nim = $(this).data('nim');
+            const semester = $(this).data('semester');
+            const contact = $(this).data('contact');
             const TourGuideAssignStatus = $(this).data('status');
 
-            $('#TourGuideAssignModalLabel').text('Ubah Pilih Tour Guide');
+            $('#TourGuideAssignModalLabel').text('Ubah Tour Guide');
             $('#TourGuideAssign-id').val(TourGuideAssignId);
-            $('#TourGuideAssign-tour_guide_id').val(tour_guide_id);
+            $('#TourGuideAssign-name').val(name);
+            $('#TourGuideAssign-nim').val(nim);
+            $('#TourGuideAssign-semester').val(semester);
+            $('#TourGuideAssign-contact').val(contact);
 
             $('#TourGuideAssignModal').modal('show');
         });

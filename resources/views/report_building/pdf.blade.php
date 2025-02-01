@@ -24,6 +24,8 @@
                 <th>Gedung</th>
                 <th>Tanggal</th>
                 <th>Jam</th>
+                <th>Pengunjung / Pengguna</th>
+                <th>Kegiatan</th>
                 <th>Status</th>
                 <th>Schedule No.</th>
                 <th>Entry User</th>
@@ -41,6 +43,8 @@
                     {{ \Carbon\Carbon::parse($buildingSchedule->start_time)->format('H:i') }} -
                     {{ \Carbon\Carbon::parse($buildingSchedule->end_time)->format('H:i') }}
                 </td>
+                <td>{{ $buildingSchedule->visitReservation->visitor_name }} ( {{ $buildingSchedule->visitReservation->visitor_company }} )</td>
+                <td>{{ $buildingSchedule->visitReservation->visitor_purphose }}</td>
                 <td>
                     @if ($buildingSchedule->is_booked)
                         Sudah di pesan

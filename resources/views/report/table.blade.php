@@ -5,12 +5,12 @@
             <th>Tanggal</th>
             <th>Jam</th>
             <th>Status</th>
-            <th>Pengunjung</th>
+            <th>Instansi</th>
+            <th>Nama Pengunjung</th>
             <th>Jumlah Orang</th>
-            <th>Tujuan</th>
-            <th>Alamat</th>
+            <th>Jumlah Kendaraan</th>
+            <th>Kegiatan</th>
             <th>Kontak</th>
-            <th>Catatan</th>
         </tr>
     </thead>
     <tbody>
@@ -30,11 +30,11 @@
                 @endif
             </td>
             <td>{{ $visitSchedule->visitor_company }}</td>
+            <td>{{ $visitSchedule->visitor_name }}</td>
             <td>{{ $visitSchedule->visitor_person }}</td>
+            <td>{{ $visitSchedule->visitor_jumlah_kendaraan }}</td>
             <td>{{ $visitSchedule->visitor_purphose }}</td>
-            <td>{{ $visitSchedule->visitor_address }}</td>
             <td>{{ $visitSchedule->visitor_contact }}</td>
-            <td>{{ $visitSchedule->visitor_note }}</td>
         </tr>
         @endforeach
     </tbody>
