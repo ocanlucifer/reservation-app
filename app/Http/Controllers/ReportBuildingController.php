@@ -41,6 +41,7 @@ class ReportBuildingController extends Controller
         })
         ->Where('is_available','like', "%{$is_available}%")
         ->Where('is_booked','like', "%{$is_booked}%")
+        ->where('building_id','<>', null)
         ->whereBetween('tanggal', [$fromDate, $toDate])
         ->orderBy($sortBy, $order)
         ->paginate($perPage);
@@ -72,6 +73,7 @@ class ReportBuildingController extends Controller
         })
         ->Where('is_available','like', "%{$is_available}%")
         ->Where('is_booked','like', "%{$is_booked}%")
+        ->where('building_id','<>', null)
         ->whereBetween('tanggal', [$fromDate, $toDate])
         ->orderBy($sortBy, $order)
         ->get();
@@ -98,6 +100,7 @@ class ReportBuildingController extends Controller
         })
         ->Where('is_available','like', "%{$is_available}%")
         ->Where('is_booked','like', "%{$is_booked}%")
+        ->where('building_id','<>', null)
         ->whereBetween('tanggal', [$fromDate, $toDate])
         ->orderBy($sortBy, $order)
         ->get();

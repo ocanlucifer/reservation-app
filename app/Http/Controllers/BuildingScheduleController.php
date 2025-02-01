@@ -280,8 +280,9 @@ class BuildingScheduleController extends Controller
         //     ->whereBetween('tanggal', [$request->start_date, $request->end_date])
         //     ->get();
 
-        $fromDate = $request->input('from_date', now()->toDateString());
-        $toDate = $request->input('to_date', now()->addDays(7)->toDateString());
+        $fromDate = $request->input('start_date', now()->toDateString());
+        $toDate = $request->input('end_date', now()->addDays(7)->toDateString());
+
         $building_id = $request->input('gedung_id');
 
         // Ambil data jadwal gedung
