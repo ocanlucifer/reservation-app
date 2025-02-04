@@ -105,17 +105,22 @@ class ReportBuildingController extends Controller
         ->orderBy($sortBy, $order)
         ->get();
 
+        $imagePath = public_path('images/kop_surat.jpg');
+        $imageData = base64_encode(file_get_contents($imagePath));
+        $imageSrc = 'data:image/png;base64,' . $imageData;
 
         // Render PDF
-        $pdf = Pdf::loadView('report_building.pdf', compact('buildingSchedules'))
-                    ->setPaper('a4', 'landscape') // Set ukuran kertas ke A4 dan orientasi
+        $pdf = Pdf::loadView('report_building.pdf', compact('buildingSchedules', 'imageSrc'))
+                    // ->setPaper('a4', 'landscape') // Set ukuran kertas ke A4 dan orientasi
+                    ->setPaper('a4', 'potrait') // Set ukuran kertas ke A4 dan orientasi
                     ->setOptions([
                         'defaultFont' => 'Arial', // Opsional: font default
                         'isHtml5ParserEnabled' => true, // Parser HTML5
-                        'isRemoteEnabled' => true // Untuk resource eksternal
+                        'isRemoteEnabled' => true, // Untuk resource eksternal
+                        'isPhpEnabled' => true  // Mengaktifkan PHP jika diperlukan untuk proses dinamis
                     ]);
 
-        return $pdf->download('Laporan Jadwal Gedung.pdf');
-        // return $pdf->stream('Laporan Kunjungan.pdf');
+        // return $pdf->download('Laporan Jadwal Gedung.pdf');
+        return $pdf->stream('Laporan Jadwal Gedung.pdf');
     }
 }
