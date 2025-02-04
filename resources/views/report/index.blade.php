@@ -201,7 +201,8 @@
             const formData = $('#filter-form').serialize(); // Ambil filter
             const url = "{{ route('report.export.pdf') }}?" + formData; // Tambahkan filter ke URL
 
-            window.location.href = url; // Redirect ke rute ekspor
+            // window.location.href = url; // Redirect ke rute ekspor
+            window.open(url, '_blank'); // Buka URL di tab baru
         });
 
     });
