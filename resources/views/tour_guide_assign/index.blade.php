@@ -146,6 +146,10 @@
                             <label for="tourguide_contact" class="form-label">Kontak</label>
                             <input type="text" id="TourGuideAssign-contact" name ="tourguide_contact" class="form-control" required>
                         </div>
+                        <div class="mb-3">
+                            <label for="TourGuideAssign-memo" class="form-label">Anggota</label>
+                            <textarea id="TourGuideAssign-memo" name ="TourGuideMemo" class="form-control" rows="5"></textarea>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -235,6 +239,7 @@
             const nim = $(this).data('nim');
             const semester = $(this).data('semester');
             const contact = $(this).data('contact');
+            const memo = $(this).data('memo');
             const TourGuideAssignStatus = $(this).data('status');
 
             $('#TourGuideAssignModalLabel').text('Ubah Tour Guide');
@@ -243,6 +248,7 @@
             $('#TourGuideAssign-nim').val(nim);
             $('#TourGuideAssign-semester').val(semester);
             $('#TourGuideAssign-contact').val(contact);
+            $('#TourGuideAssign-memo').val(memo);
 
             $('#TourGuideAssignModal').modal('show');
         });

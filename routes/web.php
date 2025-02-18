@@ -14,6 +14,7 @@ use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\BuildingScheduleController;
 use App\Http\Controllers\ReportBuildingController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ReportKoordinatorController;
 use App\Http\Controllers\TourGuideController;
 use App\Http\Controllers\VisitReservationController;
 use App\Http\Controllers\VisitScheduleController;
@@ -74,6 +75,10 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin,humas'])->group(funct
 Route::middleware(['auth', RoleMiddleware::class . ':admin,koordinator'])->group(function () {
     //Assign Tour Guide Route
     Route::resource('assignTourGuides', AssignTourGuideController::class);
+    //Report Koordinator
+    Route::get('reportkoordinators', [ReportKoordinatorController::class, 'index'])->name('reportkoordinator.index');
+    Route::get('/reportkoordinators/export-excel', [ReportKoordinatorController::class, 'exportExcel'])->name('reportkoordinator.export.excel');
+    Route::get('/reportkoordinators/export-pdf', [ReportKoordinatorController::class, 'exportPDF'])->name('reportkoordinator.export.pdf');
 });
 
 //route for admin building humas

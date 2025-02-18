@@ -35,6 +35,7 @@ class VisitReservation extends Model
         'tourguide_nim',
         'tourguide_semester',
         'tourguide_contact',
+        'TourGuideMemo',
         'create_by',
         'update_by',
     ];
