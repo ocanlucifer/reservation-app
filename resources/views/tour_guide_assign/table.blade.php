@@ -21,6 +21,7 @@
                             data-nim="{{ $visitSchedule->tourguide_nim }}"
                             data-semester="{{ $visitSchedule->tourguide_semester }}"
                             data-contact="{{ $visitSchedule->tourguide_contact }}"
+                            data-memo="{{ $visitSchedule->TourGuideMemo }}"
                             data-bs-toggle="tooltip" title="Ubah Tour Guide"
                             {{ !$visitSchedule->tour_guide_assign ? 'hidden' : '' }}
                             {{ $visitSchedule->is_confirm ? 'hidden' : '' }}>
@@ -79,6 +80,7 @@
                                     <br> NIM: {{ $visitSchedule->tourguide_nim }}
                                     <br> Semester: {{ $visitSchedule->tourguide_semester }}
                                     <br> Kontak: {{ $visitSchedule->tourguide_contact }}
+                                    <br> Anggota: {{ $visitSchedule->TourGuideMemo }}
                                     <br> ditugaskan oleh: {{ $visitSchedule->koordinator_id ? $visitSchedule->koordinator->name : '' }} ({{ $visitSchedule->tour_guide_assign_date }})
                                 </span>
                             @else

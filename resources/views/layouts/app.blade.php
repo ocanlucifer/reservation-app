@@ -193,6 +193,7 @@
                         <ul class="dropdown-menu" aria-labelledby="reportDropdown">
                             <li><a class="dropdown-item" href="{{ route('report.index') }}"><i class="fas fa-chart-line"></i> Laporan Kunjungan</a></li>
                             <li><a class="dropdown-item" href="{{ route('reportbuilding.index') }}"><i class="fas fa-chart-line"></i> Laporan Jadwal Gedung</a></li>
+                            <li><a class="dropdown-item" href="{{ route('reportkoordinator.index') }}"><i class="fas fa-chart-line"></i> Laporan Koordinator</a></li>
                         </ul>
                     </li>
                 @endif

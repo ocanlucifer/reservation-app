@@ -77,6 +77,7 @@ class AssignTourGuideController extends Controller
             'tourguide_nim'             => $request->tourguide_nim,
             'tourguide_semester'        => $request->tourguide_semester,
             'tourguide_contact'         => $request->tourguide_contact,
+            'TourGuideMemo'             => $request->TourGuideMemo,
             'tour_guide_assign'         => true,
             'tour_guide_assign_date'    => now(),
             'koordinator_id'            => Auth::user()->id,
@@ -105,6 +106,7 @@ class AssignTourGuideController extends Controller
         $visitSchedule->tourguide_nim           = null;
         $visitSchedule->tourguide_semester      = null;
         $visitSchedule->tourguide_contact       = null;
+        $visitSchedule->TourGuideMemo           = null;
         $visitSchedule->tour_guide_assign_date  = null;
         $visitSchedule->koordinator_id          = null;
         $visitSchedule->save();
